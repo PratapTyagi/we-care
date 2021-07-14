@@ -1,0 +1,35 @@
+.newCampaign > h2 {
+  margin-top: 20px;
+  color: var(--font-color);
+}
+
+.newCampaign > .newCampaign__container {
+  background-color: white;
+  width: 40%;
+  margin: 20px auto;
+  padding: 20px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.newCampaign > .newCampaign__container > form {
+  display: flex;
+  flex-direction: column;
+}
+
+.newCampaign > .newCampaign__container > form > p {
+  color: red;
+}
+
+.newCampaign > .newCampaign__container > form > input {
+  padding: 10px;
+  width: 60%;
+  margin: 20px auto;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid var(--font-color);
+  color: var(--font-color);
+}
+
+.newCampaign > .newCampaign__container > form > input:focus {
+  border-bottom: 1px solid var(--theame-color);
+}
