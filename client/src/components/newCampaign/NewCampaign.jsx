@@ -1,10 +1,25 @@
 import React, { useState } from "react";
 import "./NewCampaign.css";
-const NewCampaign = () => {
-  const [amount, setAmount] = useState("");
+import factory from "../../factory";
+import web3 from "../../web3";
 
-  const onSubmit = (e) => {
+const NewCampaign = () => {
+  const [minimumamount, setMinimumAmount] = useState("");
+  const [loading, setloading] = useState(false);
+
+  const onSubmit = async (e) => {
     e.preventDefault();
+    setloading(true);
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await factory.methods.addCampaign(minimumamount).send({
+        from: accounts[0],
+        gas: "1000000",
+      });
+    } catch ({ message }) {
+      alert(message);
+    }
+    setloading(false);
   };
 
   return (
@@ -16,10 +31,11 @@ const NewCampaign = () => {
           <input
             type="text"
             placeholder="Enter minimum amount of wei"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            value={minimumamount}
+            onChange={(e) => setMinimumAmount(e.target.value)}
           />
-          <button type="submit">Submit</button>
+          <button type="submit">Create</button>
+          {loading && <p className="loading"></p>}
         </form>
       </div>
     </div>
