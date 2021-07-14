@@ -1,1 +1,3 @@
-export { default as Navbar } from "./Navbar/Navbar";
+export { default as Navbar } from "./navbar/Navbar";
+export { default as NewCampaign } from "./newCampaign/NewCampaign";
+export { default as Home } from "./home/Home";

@@ -1,18 +1,15 @@
-import { useEffect } from "react";
 import "./App.css";
-import factory from "./factory.js";
-import { Navbar } from "./components/index";
+import { Home, Navbar, NewCampaign } from "./components";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 function App() {
-  useEffect(() => {
-    const t = async () => await factory.methods.getCampaigns().call();
-    t()
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
-  }, []);
   return (
     <div className="app">
-      <Navbar />
+      <Router>
+        <Navbar />
+        <Route path="/" exact component={Home} />
+        <Route path="/campaign/new" component={NewCampaign} />
+      </Router>
     </div>
   );
 }
