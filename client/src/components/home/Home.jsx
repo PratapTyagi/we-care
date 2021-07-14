@@ -16,19 +16,17 @@ const Home = () => {
       <div className="left">
         {addresses.map((address) => (
           <>
-            <div className="home__card">
+            <div className="home__card" key={address}>
               <p>{address}</p>
-              <button>View Details</button>
-            </div>
-            <div className="home__card">
-              <p>{address}</p>
-              <button>View Details</button>
+              <Link to={`/campaign/${address}`}>
+                <button>View Details</button>
+              </Link>
             </div>
           </>
         ))}
       </div>
       <div className="right">
-        <Link to="/campaign/new" style={{ textDecoration: "none" }}>
+        <Link to="/campaigns/new" style={{ textDecoration: "none" }}>
           <button>Create Campaign</button>
         </Link>
       </div>

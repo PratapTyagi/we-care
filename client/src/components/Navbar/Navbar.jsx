@@ -13,7 +13,7 @@ const Navbar = () => {
         </a>
         <Link
           className="link"
-          to="/campaign/new"
+          to="/campaigns/new"
           style={{ textDecoration: "none", backgroundColor: "white" }}
         >
           <p className="navbar__right__add" alt="Create Campaign">
