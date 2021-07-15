@@ -1,0 +1,99 @@
+.viewDetails {
+  display: flex;
+  align-items: center;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.viewDetails > .left {
+  flex: 7;
+  text-align: left;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+}
+
+.left > div {
+  display: flex;
+}
+
+h2 {
+  font-weight: 500;
+  color: var(--font-color);
+  padding: 20px;
+  padding-left: 0;
+}
+
+.card {
+  padding: 10px;
+  margin: 10px;
+  margin-right: 20px;
+  margin-left: 0;
+  background-color: white;
+  min-height: 100px;
+  min-width: 100px;
+  width: 30%;
+  height: 30%;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1), -1px -1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card > p {
+  color: var(--font-color);
+}
+
+.viewDetails > .left > button {
+  align-self: flex-start;
+  margin: 20px;
+  margin-left: 0;
+}
+
+.viewDetails > .right {
+  flex: 3;
+  text-align: left;
+}
+
+.right > input {
+  padding: 10px;
+  outline: none;
+  border: none;
+  background-color: initial;
+  color: var(--font-color);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.right > input:focus {
+  border-bottom: 1px solid var(--theame-color);
+}
+
+.right > button {
+  margin: 20px;
+  margin-left: 0;
+}
+
+@media screen and (max-width: 700px) {
+  .viewDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow-y: scroll !important;
+  }
+  .viewDetails > .left > h2 {
+    margin: 0 auto;
+  }
+  .viewDetails > .left > div {
+    width: 80%;
+    margin: 0 auto;
+  }
+  .card {
+    margin-right: 20px;
+  }
+  .second {
+    margin-right: 0;
+  }
+  .viewDetails > .left > button {
+    align-self: center;
+  }
+  .viewDetails > .right {
+    text-align: center;
+  }
+}
