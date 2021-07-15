@@ -1,12 +1,13 @@
 .viewDetails {
   display: flex;
   align-items: center;
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 .viewDetails > .left {
-  flex: 7;
+  flex: 0.7;
   text-align: left;
   margin-top: 10%;
   display: flex;
@@ -15,6 +16,11 @@
 
 .left > div {
   display: flex;
+}
+
+.left > div > .first {
+  flex: 1;
+  max-width: 70%;
 }
 
 h2 {
@@ -48,7 +54,7 @@ h2 {
 }
 
 .viewDetails > .right {
-  flex: 3;
+  flex: 0.3;
   text-align: left;
 }
 
@@ -60,6 +66,7 @@ h2 {
   color: var(--font-color);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .right > input:focus {
   border-bottom: 1px solid var(--theame-color);
 }
@@ -74,7 +81,6 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
     overflow-y: scroll !important;
   }
   .viewDetails > .left > h2 {
@@ -84,8 +90,14 @@ h2 {
     width: 80%;
     margin: 0 auto;
   }
-  .card {
-    margin-right: 20px;
+  .left > div > .first {
+    flex: 1;
+    min-width: 95% !important;
+    overflow-x: scroll;
+  }
+  .viewDetails > .left > .left__bottom {
+    width: 80%;
+    margin-right: 0;
   }
   .second {
     margin-right: 0;
@@ -95,5 +107,7 @@ h2 {
   }
   .viewDetails > .right {
     text-align: center;
+    display: flex;
+    flex-direction: column;
   }
 }
