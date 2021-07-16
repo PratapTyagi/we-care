@@ -2,6 +2,7 @@ import "./ViewRequests.css";
 import { Link, useParams } from "react-router-dom";
 import Campaign from "../../campaign";
 import { useState, useEffect } from "react";
+import web3 from "../../web3";
 
 const ViewRequests = (props) => {
   const { address } = useParams();
@@ -23,7 +24,7 @@ const ViewRequests = (props) => {
       }
     };
     getRequests();
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     const total = async () => {
@@ -37,6 +38,22 @@ const ViewRequests = (props) => {
     };
     total();
   }, []);
+
+  const approve = async (index) => {
+    const campaign = Campaign(address);
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await campaign.methods.approveRequest(index).send({
+        from: accounts[0],
+      });
+    } catch (error) {
+      alert(error.message || "Something went wrong");
+    }
+  };
+
+  const finalize = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="viewRequests">
@@ -69,10 +86,17 @@ const ViewRequests = (props) => {
                     {value[4]}/{totalApprovers}
                   </td>
                   <td>
-                    <button>Approve</button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        approve(index);
+                      }}
+                    >
+                      Approve
+                    </button>
                   </td>
                   <td>
-                    <button>Finalize</button>
+                    <button onClick={finalize}>Finalize</button>
                   </td>
                 </tr>
               ))}
