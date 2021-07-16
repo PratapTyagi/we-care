@@ -52,10 +52,14 @@ h2 {
   color: var(--font-color);
 }
 
-.viewDetails > .left > button {
+.left > .link {
+  margin-left: 0 !important;
+  width: fit-content;
+}
+
+.link > button {
   align-self: flex-start;
-  margin: 20px;
-  margin-left: 0;
+  margin-top: 20px;
 }
 
 .viewDetails > .right {
@@ -115,7 +119,7 @@ h2 {
   .second {
     margin-right: 0;
   }
-  .viewDetails > .left > button {
+  .viewDetails > .left > .link {
     align-self: center;
   }
   .viewDetails > .right > button {

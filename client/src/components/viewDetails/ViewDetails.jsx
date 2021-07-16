@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./ViewDetails.css";
 import Campaign from "../../campaign.js";
 import { useEffect, useState } from "react";
@@ -79,7 +79,9 @@ const ViewDetails = () => {
             <p>{campaignSummary.contributersCount}</p>
           </div>
         </div>
-        <button>View Requests</button>
+        <Link className="link" to={`/campaign/${address}/requests`}>
+          <button>View Requests</button>
+        </Link>
       </div>
       <div className="right">
         <h2>Contribute To Campaign</h2>
