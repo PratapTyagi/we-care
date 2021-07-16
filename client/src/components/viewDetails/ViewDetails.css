@@ -14,17 +14,17 @@
   flex-direction: column;
 }
 
-.left > div {
+.viewDetails > .left > div {
   display: flex;
 }
 
-.left > div > .first {
+.viewDetails > .left > div > .first {
   flex: 1;
   max-width: 75%;
   overflow-x: hidden;
 }
 
-.left > div > .first::-webkit-scrollbar {
+.viewDetails > .left > div > .first::-webkit-scrollbar {
   display: none;
 }
 
@@ -41,10 +41,10 @@ h2 {
   margin-right: 20px;
   margin-left: 0;
   background-color: white;
-  min-height: 100px;
+  min-height: 100px !important;
   min-width: 100px;
   width: 30%;
-  height: 30%;
+  height: 30% !important;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1), -1px -1px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -52,7 +52,7 @@ h2 {
   color: var(--font-color);
 }
 
-.left > .link {
+.viewDetails > .left > .link {
   margin-left: 0 !important;
   width: fit-content;
 }
@@ -69,11 +69,11 @@ h2 {
   flex-direction: column;
 }
 
-.right > label {
+.viewDetails > .right > label {
   color: red;
 }
 
-.right > input {
+.viewDetails > .right > input {
   padding: 10px;
   outline: none;
   border: none;
@@ -82,11 +82,11 @@ h2 {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.right > input:focus {
+.viewDetails > .right > input:focus {
   border-bottom: 1px solid var(--theame-color);
 }
 
-.right > button {
+.viewDetails > .right > button {
   margin: 20px;
   margin-left: 0;
   align-self: flex-start;
@@ -106,12 +106,11 @@ h2 {
     width: 80%;
     margin: 0 auto;
   }
-  .left > div > .first {
+  .viewDetails > .left > div > .first {
     flex: 1;
     min-width: 95% !important;
     overflow-x: scroll;
   }
-
   .viewDetails > .left > .left__bottom {
     width: 80%;
     margin-right: 0;

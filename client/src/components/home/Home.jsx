@@ -14,6 +14,7 @@ const Home = () => {
   return (
     <div className="home">
       <div className="left">
+        <h2>Start Ups</h2>
         {addresses.map((address) => (
           <>
             <div className="home__card" key={address}>

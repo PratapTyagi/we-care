@@ -1,0 +1,38 @@
+.addRequest {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.addRequest > form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: white;
+}
+
+.addRequest > form > input {
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid var(--font-color);
+  background-color: initial;
+  color: var(--font-color);
+}
+
+.addRequest > form > input:focus {
+  border-bottom: 1px solid var(--theame-color);
+}
+
+.addRequest > form > button {
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 800px) {
+  .addRequest > form {
+    width: 100%;
+  }
+}

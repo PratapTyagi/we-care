@@ -79,7 +79,13 @@ const ViewDetails = () => {
             <p>{campaignSummary.contributersCount}</p>
           </div>
         </div>
-        <Link className="link" to={`/campaign/${address}/requests`}>
+        <Link
+          className="link"
+          to={{
+            pathname: `/campaign/${address}/requests`,
+            state: parseInt(campaignSummary.totalRequests),
+          }}
+        >
           <button>View Requests</button>
         </Link>
       </div>

@@ -1,0 +1,51 @@
+.viewRequests {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.viewRequests > .link > button {
+  margin: 0 0 10px 0;
+}
+
+.viewRequests > .viewRequests__inner {
+  width: 75%;
+  overflow-x: scroll;
+  margin: 0 auto;
+}
+
+.viewRequests > .viewRequests__inner::-webkit-scrollbar {
+  display: none;
+}
+
+.viewRequests__inner {
+  max-height: 60vh !important;
+  overflow-y: scroll;
+}
+
+.viewRequests__inner::-webkit-scrollbar {
+  display: none;
+}
+
+td {
+  overflow-x: scroll;
+  max-width: 100px !important;
+}
+
+td > button {
+  border: none;
+  background-color: initial;
+  padding: 0 10px;
+}
+
+td::-webkit-scrollbar {
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  .viewRequests {
+    display: flex;
+    flex-direction: column;
+  }
+}
