@@ -37,7 +37,7 @@ const ViewRequests = (props) => {
       }
     };
     total();
-  }, []);
+  }, [totalApprovers]);
 
   const approve = async (index) => {
     const campaign = Campaign(address);
@@ -51,9 +51,19 @@ const ViewRequests = (props) => {
     }
   };
 
-  const finalize = (e) => {
-    e.preventDefault();
+  const finalize = async (index) => {
+    const campaign = Campaign(address);
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await campaign.methods.finalizeRequest(index).send({
+        from: accounts[0],
+      });
+    } catch (error) {
+      alert(error.message || "Something went wrong");
+    }
   };
+
+  console.log(data);
 
   return (
     <div className="viewRequests">
@@ -77,7 +87,15 @@ const ViewRequests = (props) => {
           <tbody>
             {data &&
               data.map((value, index) => (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  className={`${value.compleate ? "dim" : ""} ${
+                    value.approvalsCount + 1 > totalApprovers / 2 &&
+                    !value.compleate
+                      ? "readyToFinalize"
+                      : ""
+                  }`}
+                >
                   <td>{index}</td>
                   <td>{value[0]}</td>
                   <td>{value[2]}</td>
@@ -86,17 +104,28 @@ const ViewRequests = (props) => {
                     {value[4]}/{totalApprovers}
                   </td>
                   <td>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        approve(index);
-                      }}
-                    >
-                      Approve
-                    </button>
+                    {!value.compleate ? (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          approve(index);
+                        }}
+                      >
+                        Approve
+                      </button>
+                    ) : null}
                   </td>
                   <td>
-                    <button onClick={finalize}>Finalize</button>
+                    {!value.compleate ? (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          finalize(index);
+                        }}
+                      >
+                        Finalize
+                      </button>
+                    ) : null}
                   </td>
                 </tr>
               ))}

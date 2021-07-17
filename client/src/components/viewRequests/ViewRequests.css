@@ -28,6 +28,18 @@
   display: none;
 }
 
+th {
+  color: rgb(98, 96, 96);
+}
+
+tbody > .dim {
+  color: grey;
+}
+
+tbody > .readyToFinalize {
+  background-color: rgba(80, 211, 80, 0.2) !important;
+}
+
 td {
   overflow-x: scroll;
   max-width: 100px !important;
