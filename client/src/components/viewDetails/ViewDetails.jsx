@@ -15,6 +15,27 @@ const ViewDetails = () => {
   });
   const [value, setvalue] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isContributor, setIsContributor] = useState(false);
+  const [account, setAccount] = useState("");
+
+  // Current Account and is it contributor
+  useEffect(() => {
+    const accounts = async () => await web3.eth.getAccounts();
+    accounts()
+      .then((currAccount) => {
+        setAccount(currAccount[0]);
+        const campaign = Campaign(address);
+        const contributorOrNot = async () =>
+          await campaign.methods.isContributor(currAccount[0]).call();
+
+        contributorOrNot()
+          .then((data) => setIsContributor(data))
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // Current campaign info
   useEffect(() => {
     const campaign = Campaign(address);
     const t = async () => await campaign.methods.getSummary().call();
@@ -34,9 +55,9 @@ const ViewDetails = () => {
   const contribute = async (e) => {
     e.preventDefault();
     const campaign = Campaign(address);
+    const accounts = await web3.eth.getAccounts();
     try {
       setLoading(true);
-      const accounts = await web3.eth.getAccounts();
       await campaign.methods.contribute().send({
         from: accounts[0],
         value: value,
@@ -79,15 +100,21 @@ const ViewDetails = () => {
             <p>{campaignSummary.contributersCount}</p>
           </div>
         </div>
-        <Link
-          className="link"
-          to={{
-            pathname: `/campaign/${address}/requests`,
-            state: parseInt(campaignSummary.totalRequests),
-          }}
-        >
-          <button>View Requests</button>
-        </Link>
+        {isContributor || campaignSummary.manager === account ? (
+          <Link
+            className="link"
+            to={{
+              pathname: `/campaign/${address}/requests`,
+              state: {
+                totalRequests: parseInt(campaignSummary.totalRequests),
+                manager: campaignSummary.manager,
+                isContributor: isContributor,
+              },
+            }}
+          >
+            <button>View Requests</button>
+          </Link>
+        ) : null}
       </div>
       <div className="right">
         <h2>Contribute To Campaign</h2>

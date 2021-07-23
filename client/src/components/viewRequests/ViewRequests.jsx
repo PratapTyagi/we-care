@@ -8,13 +8,15 @@ const ViewRequests = (props) => {
   const { address } = useParams();
   const [data, setData] = useState([]);
   const [totalApprovers, settotalApprovers] = useState(0);
+  const [currentUser, setCurrentUser] = useState("");
 
+  // Request's data
   useEffect(() => {
     const getRequests = async () => {
       const campaign = Campaign(address);
       try {
         let newData = [];
-        for (let i = 0; i < props.location.state; i++) {
+        for (let i = 0; i < props.location.state.totalRequests; i++) {
           const request = await campaign.methods.requests(i).call();
           newData.push(request);
         }
@@ -26,6 +28,7 @@ const ViewRequests = (props) => {
     getRequests();
   }, [data]);
 
+  // Contributors count
   useEffect(() => {
     const total = async () => {
       const campaign = Campaign(address);
@@ -38,6 +41,11 @@ const ViewRequests = (props) => {
     };
     total();
   }, [totalApprovers]);
+
+  useEffect(() => {
+    const getAccounts = async () => await web3.eth.getAccounts();
+    getAccounts().then((accounts) => setCurrentUser(accounts[0]));
+  }, [currentUser]);
 
   const approve = async (index) => {
     const campaign = Campaign(address);
@@ -63,14 +71,14 @@ const ViewRequests = (props) => {
     }
   };
 
-  console.log(data);
-
   return (
     <div className="viewRequests">
       <h2>Requests</h2>
-      <Link className="link" to={`/campaign/${address}/requests/addrequest`}>
-        <button>Add request</button>
-      </Link>
+      {props.location.state.manager === currentUser ? (
+        <Link className="link" to={`/campaign/${address}/requests/addrequest`}>
+          <button>Add request</button>
+        </Link>
+      ) : null}
       <div className="viewRequests__inner">
         <table className="table table-borderless container">
           <thead className="table-active">
@@ -80,8 +88,12 @@ const ViewRequests = (props) => {
               <th scope="col">Amount</th>
               <th scope="col">Recipient</th>
               <th scope="col">Approval Count</th>
-              <th scope="col">Approve</th>
-              <th scope="col">Finalize</th>
+              {props.location.state.isContributor ? (
+                <th scope="col">Approve</th>
+              ) : null}
+              {props.location.state.manager === currentUser ? (
+                <th scope="col">Finalize</th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
@@ -104,7 +116,7 @@ const ViewRequests = (props) => {
                     {value[4]}/{totalApprovers}
                   </td>
                   <td>
-                    {!value.compleate ? (
+                    {!value.compleate && props.location.state.isContributor ? (
                       <button
                         onClick={(e) => {
                           e.preventDefault();
@@ -116,7 +128,8 @@ const ViewRequests = (props) => {
                     ) : null}
                   </td>
                   <td>
-                    {!value.compleate ? (
+                    {!value.compleate &&
+                    props.location.state.manager === currentUser ? (
                       <button
                         onClick={(e) => {
                           e.preventDefault();
