@@ -109,4 +109,13 @@ describe("Campaign", () => {
     balance = parseFloat(balance);
     assert(balance > 104);
   });
+
+  it("is contributor or not", async () => {
+    await campaign.methods
+      .contribute()
+      .send({ from: accounts[0], value: "102" });
+
+    const isContributor = await campaign.methods.isContributor().call();
+    console.log(isContributor);
+  });
 });

@@ -87,4 +87,8 @@ contract Campaign {
             manager
         );
     }  
+
+    function isContributor() public view returns (bool) {
+        return contributors[msg.sender];
+    }
 }
