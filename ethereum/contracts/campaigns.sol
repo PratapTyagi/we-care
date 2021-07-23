@@ -88,7 +88,37 @@ contract Campaign {
         );
     }  
 
-    function isContributor() public view returns (bool) {
-        return contributors[msg.sender];
+    function isContributor(string _address) public view returns (bool) {
+        address currentUser = toAddress(_address);
+        return contributors[currentUser];
+    }
+    
+    function toAddress(string self) pure internal returns (address){
+        bytes memory tmp = bytes(self);
+        
+        uint addr = 0;
+        uint b;
+        uint b2;
+        
+        for (uint i=2; i<2+2*20; i+=2){
+            
+            addr *= 256;
+            
+            b = uint(tmp[i]);
+            b2 = uint(tmp[i+1]);
+            
+            if ((b >= 97)&&(b <= 102)) b -= 87;
+            else if ((b >= 48)&&(b <= 57)) b -= 48;
+            else if ((b >= 65)&&(b <= 70)) b -= 55;
+            
+            if ((b2 >= 97)&&(b2 <= 102)) b2 -= 87;
+            else if ((b2 >= 48)&&(b2 <= 57)) b2 -= 48;
+            else if ((b2 >= 65)&&(b2 <= 70)) b2 -= 55;
+            
+            addr += (b*16+b2);
+            
+        }
+        
+        return address(addr);
     }
 }
