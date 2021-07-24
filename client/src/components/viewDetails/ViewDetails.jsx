@@ -33,7 +33,7 @@ const ViewDetails = () => {
           .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [isContributor, account]);
 
   // Current campaign info
   useEffect(() => {

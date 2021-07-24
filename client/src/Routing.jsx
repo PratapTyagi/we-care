@@ -9,26 +9,35 @@ import {
 } from "./components";
 import web3 from "./web3";
 
+const getAccounts = async () => {
+  if (window && window.web3) {
+    let accounts = await web3.eth.getAccounts();
+    return accounts[0];
+  }
+};
+
 const Routing = () => {
   const [account, setAccount] = useState("");
-  let accounts;
-  useEffect(() => {
-    const getAccounts = async () => {
-      if (window && window.web3) {
-        accounts = await web3.eth.getAccounts();
-        setAccount(accounts[0]);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (account) {
-    } else {
-      history.push("/");
-    }
-  }, []);
 
   const history = useHistory();
+
+  useEffect(() => {
+    getAccounts()
+      .then((userAddress) => setAccount(userAddress))
+      .catch((err) => console.log(err));
+    console.log(
+      !history.location.pathname.startsWith("/campaigns"),
+      !history.location.pathname.startsWith("/campaign"),
+      !account
+    );
+    if (
+      !account &&
+      (!history.location.pathname.localeCompare("/campaigns/:address") ||
+        !history.location.pathname.startsWith("/campaign"))
+    ) {
+      history.push("/");
+    }
+  }, [history]);
 
   return (
     <>
