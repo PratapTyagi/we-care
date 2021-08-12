@@ -3,8 +3,8 @@ pragma solidity ^0.4.17;
 contract Factory {
     address[] campaigns;
     
-    function addCampaign(uint minimumContribution) public {
-        address newCampaign = new Campaign(minimumContribution, msg.sender);
+    function addCampaign(uint minimumContribution, string _imageHash, string _title, string _description) public {
+        address newCampaign = new Campaign(minimumContribution, msg.sender, _imageHash, _title, _description);
         campaigns.push(newCampaign);
     }
     
@@ -35,10 +35,25 @@ contract Campaign {
     mapping(address => bool) public contributors;
     Request[] public requests;
     uint public contributorsCount;
+    string public image;
+    string public title;
+    string public campaignDescription;
 
-    constructor (uint value, address creator) public {
+    constructor (uint value, address creator, string _imageHash, string _title, string _description) public {
         minimumContribution = value;
         manager = creator;
+        image = _imageHash;
+        title = _title;
+        campaignDescription = _description;
+    }
+
+    function getDetails() public view returns(address, string, string, string) {
+        return (
+            manager,
+            title,
+            campaignDescription,
+            image
+        );
     }
     
     function contribute() public payable {
@@ -47,11 +62,11 @@ contract Campaign {
         contributorsCount++;
     }
     
-    function createRequest(string description, uint value, address receipient) public restricted {
+    function createRequest(string _description, uint _value, address _receipient) public restricted {
         Request memory newRequest = Request({
-            description: description,
-            value: value,
-            receipient: receipient,
+            description: _description,
+            value: _value,
+            receipient: _receipient,
             compleate: false,
             approvalsCount: 0
         });
