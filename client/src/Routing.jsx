@@ -25,11 +25,6 @@ const Routing = () => {
     getAccounts()
       .then((userAddress) => setAccount(userAddress))
       .catch((err) => console.log(err));
-    console.log(
-      !history.location.pathname.startsWith("/campaigns"),
-      !history.location.pathname.startsWith("/campaign"),
-      !account
-    );
     if (
       !account &&
       (!history.location.pathname.localeCompare("/campaigns/:address") ||

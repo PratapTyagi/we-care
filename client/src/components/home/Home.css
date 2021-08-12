@@ -43,6 +43,7 @@ button {
   padding: 10px;
   cursor: pointer;
   align-self: center;
+  font-weight: 700;
 }
 
 button:hover {

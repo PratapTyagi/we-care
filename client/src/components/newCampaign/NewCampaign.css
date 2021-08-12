@@ -7,8 +7,11 @@
   background-color: white;
   width: 40%;
   margin: 20px auto;
-  padding: 20px;
+  padding: 20px 0;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .newCampaign > .newCampaign__container > form {
@@ -23,7 +26,8 @@
 .newCampaign > .newCampaign__container > form > input {
   padding: 10px;
   width: 60%;
-  margin: 20px auto;
+  margin: 10px auto;
+  margin-top: 0;
   outline: none;
   border: none;
   border-bottom: 1px solid var(--font-color);
@@ -31,9 +35,50 @@
 }
 
 .newCampaign > .newCampaign__container > form > input:focus {
-  border-bottom: 1px solid var(--theame-color);
+  border-bottom: 2px solid var(--theame-color);
 }
 
+/* Input Styling */
+
+.newCampaign__container > .container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+input[type="file"] {
+  position: absolute;
+  z-index: -1;
+  top: 10px;
+  left: 8px;
+  font-size: 17px;
+  color: #b8b8b8;
+}
+
+.button-wrap {
+  position: relative;
+}
+
+.container > .button-wrap > .button {
+  display: inline-block;
+  text-align: left;
+  padding: 12px 10px;
+  margin-bottom: 10px !important;
+  cursor: pointer;
+  border-bottom: 1px solid grey;
+  background-color: initial;
+  color: gray;
+  font-size: 16px;
+  font-weight: 400;
+  width: 64% !important;
+}
+
+.container > .button-wrap > .button:hover {
+  border-bottom: 2px solid var(--theame-color);
+}
+
+/* Loader styling */
 .loading {
   display: inline-block;
   width: 50px;
@@ -55,5 +100,11 @@
 @-webkit-keyframes spin {
   to {
     -webkit-transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .newCampaign > .newCampaign__container {
+    width: 80%;
   }
 }

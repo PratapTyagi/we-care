@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import factory from "../../factory.js";
+import Campaign from "../../campaign.js";
 
 import "./Home.css";
 const Home = () => {
@@ -11,6 +12,17 @@ const Home = () => {
       .then((data) => setAddresses(data))
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    addresses.forEach((e) => {
+      const campaign = Campaign(e);
+      const t = async () => await campaign.methods.getDetails().call();
+      t()
+        .then((info) => console.log(info))
+        .catch((err) => console.log(err));
+    });
+  }, [addresses]);
+
   return (
     <div className="home">
       <div className="left">
