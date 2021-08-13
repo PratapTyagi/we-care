@@ -15,44 +15,34 @@
   display: none;
 }
 
-.home > .left > .home__card {
-  width: 70%;
-  height: 20%;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  background-color: white;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  box-shadow: 1px 1px 5px rgba(27, 27, 27, 0.1),
-    -1px -1px 5px rgb(27, 27, 27, 0.1);
-}
-
-.home > .left > .home__card > p {
-  color: var(--font-color);
-}
-
 button {
   color: var(--theame-color);
-  background-color: white;
+  background-color: initial;
   outline: none;
   border: none;
-  border: 2px solid var(--theame-color);
-  border-radius: 30px;
+  border-bottom: 2px solid var(--theame-color);
+  border-radius: 50%;
   padding: 10px;
   cursor: pointer;
   align-self: center;
   font-weight: 700;
+  text-transform: capitalize;
 }
 
 button:hover {
-  color: white;
-  background-color: var(--theame-color);
-  transition: background-color 0.3s ease-out;
+  border-left: 2px solid var(--theame-color);
+  border-right: 2px solid var(--theame-color);
+  transition: border-left 0.3s ease-out;
+  transition: border-right 0.3s ease-out;
 }
 
 .home > .right {
   flex: 2;
-  margin: 30vh 0 0 0;
+  margin: 40vh 0 0 0;
+}
+
+@media screen and (max-width: 800px) {
+  .home > .right {
+    display: none;
+  }
 }

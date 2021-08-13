@@ -45,8 +45,9 @@ const NewCampaign = () => {
         .send({
           from: accounts[0],
         });
+      window.location.href = "/";
     } catch (error) {
-      console.log(error);
+      alert("Check your metamask");
     }
     setloading(false);
   };

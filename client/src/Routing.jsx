@@ -32,7 +32,7 @@ const Routing = () => {
     ) {
       history.push("/");
     }
-  }, [history]);
+  }, [history, account]);
 
   return (
     <>
