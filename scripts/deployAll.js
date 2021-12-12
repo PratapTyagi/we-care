@@ -11,7 +11,17 @@ const main = async () => {
   };
   fs.writeFileSync("client/src/abi/Factory.json", JSON.stringify(FactoryData));
 
-  console.log(deployedContract.address);
+  let campaignAbi = fs.readFileSync(
+    "artifacts/contracts/campaigns.sol/Campaign.json"
+  );
+  campaignAbi = JSON.parse(campaignAbi.toString()).abi;
+  const CampaignData = {
+    abi: campaignAbi,
+  };
+  fs.writeFileSync(
+    "client/src/abi/Campaign.json",
+    JSON.stringify(CampaignData)
+  );
 };
 
 main()
