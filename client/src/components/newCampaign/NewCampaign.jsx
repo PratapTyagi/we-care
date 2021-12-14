@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./NewCampaign.css";
-import factory from "../../factory";
-import web3 from "../../web3";
+import FactoryJSON from "../../abi/Factory.json";
+import { ethers } from "ethers";
 import { create } from "ipfs-http-client";
 const ipfs = create({
   host: "ipfs.infura.io",
@@ -37,17 +37,27 @@ const NewCampaign = () => {
       );
 
     setloading(true);
-    try {
+    if (window.ethereum !== undefined) {
       const data = await ipfs.add(buffer);
-      const accounts = await web3.eth.getAccounts();
-      await factory.methods
-        .addCampaign(minimumamount, data.path, title, description)
-        .send({
-          from: accounts[0],
-        });
-      window.location.href = "/";
-    } catch (error) {
-      alert("Check your metamask");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await provider.getSigner();
+      let contract = new ethers.Contract(
+        FactoryJSON.address,
+        FactoryJSON.abi,
+        signer
+      );
+      try {
+        const info = await contract.addCampaign(
+          minimumamount,
+          data.path,
+          title,
+          description
+        );
+        console.log(info);
+        window.location.href = "/";
+      } catch (error) {
+        console.log(error);
+      }
     }
     setloading(false);
   };
