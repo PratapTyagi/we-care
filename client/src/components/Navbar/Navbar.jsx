@@ -12,13 +12,11 @@ const Navbar = () => {
           Github
         </a>
         <Link
-          className="link"
           to="/campaigns/new"
-          style={{ textDecoration: "none", backgroundColor: "white" }}
+          className="link"
+          style={{ textDecoration: "none" }}
         >
-          <p className="navbar__right__add" alt="Create Campaign">
-            +
-          </p>
+          Create
         </Link>
       </div>
     </div>
