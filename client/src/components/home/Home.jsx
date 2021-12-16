@@ -1,15 +1,38 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FactoryJSON from "../../abi/Factory.json";
+import CampaignJSON from "../../abi/Campaign.json";
 import { ethers } from "ethers";
 import Card from "../card/Card";
 import "./Home.css";
 
 const Home = () => {
-  const [addresses, setAddresses] = useState([]);
+  const [campaignDetails, setCampaignDetails] = useState([]);
 
-  const getCampaign = async () => {
-    if (window.ethereum !== undefined) {
+  // Details of campaign corresponding to address
+  const singleCampaignDetail = async (address) => {
+    if (typeof window.ethereum !== undefined) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(address, CampaignJSON.abi, signer);
+      try {
+        const data = await contract.getDetails();
+        return {
+          address,
+          manager: data[0],
+          title: data[1],
+          campaignDescription: data[2],
+          image: data[3],
+        };
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  // Get Campaign addresses
+  const getCampaignAddresses = async () => {
+    if (typeof window.ethereum !== undefined) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = await provider.getSigner();
       let contract = new ethers.Contract(
@@ -19,22 +42,26 @@ const Home = () => {
       );
       try {
         let campaignAddress = await contract.getCampaigns();
-        setAddresses(campaignAddress);
+        for (let index = 0; index < campaignAddress.length; index++) {
+          const detail = await singleCampaignDetail(campaignAddress[index]);
+          setCampaignDetails((prevItem) => [...prevItem, detail]);
+        }
       } catch (error) {
         console.log(error);
       }
     }
   };
+  console.log(campaignDetails);
   useEffect(() => {
-    getCampaign();
+    getCampaignAddresses();
   }, []);
 
   return (
     <div className="home">
       <div className="left">
         <h2>Start Ups</h2>
-        {addresses.map((address) => (
-          <Card address={address} />
+        {campaignDetails.map((details) => (
+          <Card details={details} />
         ))}
       </div>
       <div className="right">
