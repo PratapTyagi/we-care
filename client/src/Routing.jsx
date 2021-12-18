@@ -7,11 +7,12 @@ import {
   ViewRequests,
   Addrequest,
 } from "./components";
-import web3 from "./web3";
 
 const getAccounts = async () => {
-  if (window && window.web3) {
-    let accounts = await web3.eth.getAccounts();
+  if (window && typeof window.ethereum !== undefined) {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
     return accounts[0];
   }
 };
@@ -22,9 +23,8 @@ const Routing = () => {
   const history = useHistory();
 
   useEffect(() => {
-    getAccounts()
-      .then((userAddress) => setAccount(userAddress))
-      .catch((err) => console.log(err));
+    const account = getAccounts();
+    setAccount(account);
     if (
       !account &&
       (!history.location.pathname.localeCompare("/campaigns/:address") ||
