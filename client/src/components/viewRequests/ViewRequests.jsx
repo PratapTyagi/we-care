@@ -1,71 +1,125 @@
 import "./ViewRequests.css";
 import { Link, useParams } from "react-router-dom";
-import Campaign from "../../campaign";
 import { useState, useEffect } from "react";
-import web3 from "../../web3";
+import { ethers } from "ethers";
+import CampaignJSON from "../../abi/Campaign.json";
 
-const ViewRequests = (props) => {
+const ViewRequests = () => {
   const { address } = useParams();
   const [data, setData] = useState([]);
   const [totalApprovers, settotalApprovers] = useState(0);
   const [currentUser, setCurrentUser] = useState("");
+  const [isContributor, setIsContributor] = useState(false);
+  const [campaignSummary, setcampaignSummary] = useState({
+    totalRequests: "",
+    manager: "",
+  });
+
+  // Current Account and is it contributor
+  useEffect(async () => {
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
+    setIsContributor(await campaign.isContributor(accounts[0]));
+  }, [isContributor]);
+
+  // Current campaign info
+  useEffect(async () => {
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
+    const data = await campaign.getSummary();
+    setcampaignSummary({
+      totalRequests: data[2].toString(),
+      manager: data[4].toLowerCase(),
+    });
+  }, []);
 
   // Request's data
-  useEffect(() => {
-    const getRequests = async () => {
-      const campaign = Campaign(address);
-      try {
-        let newData = [];
-        for (let i = 0; i < props.location.state.totalRequests; i++) {
-          const request = await campaign.methods.requests(i).call();
-          newData.push(request);
-        }
-        setData(newData);
-      } catch (error) {
-        alert(error);
+  useEffect(async () => {
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
+    try {
+      let newData = [];
+      for (let i = 0; i < campaignSummary.totalRequests; i++) {
+        let request = await campaign.requests(i);
+        request = {
+          ...request,
+          2: request[2].toString(),
+          4: request[4].toString(),
+        };
+        newData.push(request);
       }
-    };
-    getRequests();
+      setData(newData);
+    } catch (error) {
+      alert(error);
+    }
   }, [data]);
 
   // Contributors count
-  useEffect(() => {
-    const total = async () => {
-      const campaign = Campaign(address);
-      try {
-        const count = await campaign.methods.contributorsCount().call();
-        settotalApprovers(count);
-      } catch (error) {
-        alert(error);
-      }
-    };
-    total();
+  useEffect(async () => {
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
+    try {
+      const count = await campaign.contributorsCount();
+      settotalApprovers(count.toString());
+    } catch (error) {
+      alert(error);
+    }
   }, [totalApprovers]);
 
-  useEffect(() => {
-    const getAccounts = async () => await web3.eth.getAccounts();
-    getAccounts().then((accounts) => setCurrentUser(accounts[0]));
-  }, [currentUser]);
+  useEffect(async () => {
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+
+    setCurrentUser(accounts[0].toLowerCase());
+  }, []);
 
   const approve = async (index) => {
-    const campaign = Campaign(address);
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
     try {
-      const accounts = await web3.eth.getAccounts();
-      await campaign.methods.approveRequest(index).send({
-        from: accounts[0],
-      });
+      await campaign.approveRequest(index);
     } catch (error) {
       alert(error.message || "Something went wrong");
     }
   };
 
   const finalize = async (index) => {
-    const campaign = Campaign(address);
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
     try {
-      const accounts = await web3.eth.getAccounts();
-      await campaign.methods.finalizeRequest(index).send({
-        from: accounts[0],
-      });
+      await campaign.finalizeRequest(index);
     } catch (error) {
       alert(error.message || "Something went wrong");
     }
@@ -74,7 +128,7 @@ const ViewRequests = (props) => {
   return (
     <div className="viewRequests">
       <h2>Requests</h2>
-      {props.location.state.manager === currentUser ? (
+      {campaignSummary.manager === currentUser ? (
         <Link className="link" to={`/campaign/${address}/requests/addrequest`}>
           <button>Add request</button>
         </Link>
@@ -88,10 +142,8 @@ const ViewRequests = (props) => {
               <th scope="col">Amount</th>
               <th scope="col">Recipient</th>
               <th scope="col">Approval Count</th>
-              {props.location.state.isContributor ? (
-                <th scope="col">Approve</th>
-              ) : null}
-              {props.location.state.manager === currentUser ? (
+              {isContributor ? <th scope="col">Approve</th> : null}
+              {campaignSummary.manager === currentUser ? (
                 <th scope="col">Finalize</th>
               ) : null}
             </tr>
@@ -116,8 +168,9 @@ const ViewRequests = (props) => {
                     {value[4]}/{totalApprovers}
                   </td>
                   <td>
-                    {!value.compleate && props.location.state.isContributor ? (
+                    {!value.compleate && isContributor ? (
                       <button
+                        className="button"
                         onClick={(e) => {
                           e.preventDefault();
                           approve(index);
@@ -129,8 +182,9 @@ const ViewRequests = (props) => {
                   </td>
                   <td>
                     {!value.compleate &&
-                    props.location.state.manager === currentUser ? (
+                    campaignSummary.manager === currentUser ? (
                       <button
+                        className="button"
                         onClick={(e) => {
                           e.preventDefault();
                           finalize(index);
