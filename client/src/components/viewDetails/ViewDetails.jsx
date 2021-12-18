@@ -42,14 +42,18 @@ const ViewDetails = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
-    const data = await campaign.getSummary();
-    setcampaignSummary({
-      balance: parseInt(data[0].toString()) / Math.pow(10, 18) - 1,
-      minimumContribution: parseInt(data[1].toString()) + "",
-      totalRequests: data[2].toString(),
-      contributersCount: data[3].toString(),
-      manager: data[4],
-    });
+    try {
+      const data = await campaign.getSummary();
+      setcampaignSummary({
+        balance: parseInt(data[0].toString()) / Math.pow(10, 18) - 1,
+        minimumContribution: parseInt(data[1].toString()) + "",
+        totalRequests: data[2].toString(),
+        contributersCount: data[3].toString(),
+        manager: data[4],
+      });
+    } catch (error) {
+      console.log(error.message || "Something went wrong");
+    }
   }, []);
 
   const contribute = async (e) => {
@@ -107,17 +111,7 @@ const ViewDetails = () => {
           </div>
         </div>
         {isContributor || campaignSummary.manager === account ? (
-          <Link
-            className="link"
-            to={{
-              pathname: `/campaign/${address}/requests`,
-              state: {
-                totalRequests: parseInt(campaignSummary.totalRequests),
-                manager: campaignSummary.manager,
-                isContributor: isContributor,
-              },
-            }}
-          >
+          <Link className="link" to={`/campaign/${address}/requests`}>
             <button>View Requests</button>
           </Link>
         ) : null}
@@ -128,7 +122,7 @@ const ViewDetails = () => {
         <input
           type="text"
           placeholder={`Minimum ${campaignSummary.minimumContribution} wei`}
-          value={value}
+          defaultValue={value}
           onChange={(e) => setvalue(e.target.value)}
         />
         {loading && <p className="loading"></p>}
