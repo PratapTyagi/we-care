@@ -43,10 +43,9 @@ const ViewDetails = () => {
     const signer = provider.getSigner();
     const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
     const data = await campaign.getSummary();
-    console.log("Data:", data[0].toString());
     setcampaignSummary({
       balance: parseInt(data[0].toString()) / Math.pow(10, 18) - 1,
-      minimumContribution: parseInt(data[1].toString()) + 1 + "",
+      minimumContribution: parseInt(data[1].toString()) + "",
       totalRequests: data[2].toString(),
       contributersCount: data[3].toString(),
       manager: data[4],
