@@ -1,7 +1,4 @@
-import { useState } from "react";
 import "./Card.css";
-
-import Campaign from "../../campaign.js";
 import { Link } from "react-router-dom";
 
 const Card = ({ details }) => {
