@@ -51,7 +51,7 @@ const Home = () => {
       }
     }
   };
-  console.log(campaignDetails);
+
   useEffect(() => {
     getCampaignAddresses();
   }, []);
