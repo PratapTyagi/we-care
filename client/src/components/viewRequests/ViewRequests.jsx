@@ -68,7 +68,7 @@ const ViewRequests = () => {
     } catch (error) {
       alert(error);
     }
-  }, [data]);
+  }, [campaignSummary]);
 
   // Contributors count
   useEffect(async () => {
