@@ -32,7 +32,7 @@ const ViewDetails = () => {
     const signer = provider.getSigner();
     const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
     setIsContributor(await campaign.isContributor(accounts[0]));
-  }, [isContributor, account]);
+  }, [isContributor, account, campaignSummary]);
 
   // Current campaign info
   useEffect(async () => {
@@ -54,7 +54,7 @@ const ViewDetails = () => {
     } catch (error) {
       console.log(error.message || "Something went wrong");
     }
-  }, []);
+  }, [campaignSummary]);
 
   const contribute = async (e) => {
     e.preventDefault();
@@ -70,7 +70,7 @@ const ViewDetails = () => {
         const info = await contract.contribute({
           value: ethers.utils.parseEther(value),
         });
-        console.log(info);
+        await info.wait();
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -96,7 +96,7 @@ const ViewDetails = () => {
             <p>{parseInt(campaignSummary.balance) + 1} wei</p>
           </div>
           <div className="card second">
-            <p>Minimum Contribution</p>
+            <p>Min. Contribution</p>
             <p>{campaignSummary.minimumContribution} wei</p>
           </div>
         </div>
