@@ -105,7 +105,15 @@ const ViewRequests = () => {
     const signer = provider.getSigner();
     const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
     try {
-      await campaign.approveRequest(index);
+      let info = await campaign.approveRequest(index);
+      await info.wait();
+
+      // Updating number of approvals
+      let dataArray = [...data];
+      let dataAtRequestIndex = { ...dataArray[index] };
+      dataAtRequestIndex[4] = parseInt(data[index][4]) + 1;
+      dataArray[index] = dataAtRequestIndex;
+      setData(dataArray);
     } catch (error) {
       alert(error.message || "Something went wrong");
     }
