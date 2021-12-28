@@ -47,14 +47,14 @@ const NewCampaign = () => {
         signer
       );
       try {
-        const info = await contract.addCampaign(
+        let info = await contract.addCampaign(
           minimumamount,
           data.path,
           title,
           description
         );
-        console.log(info);
-        window.location.href = "/";
+        info = await info.wait();
+        if (info) window.location.href = "/";
       } catch (error) {
         console.log(error);
       }
