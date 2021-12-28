@@ -28,12 +28,13 @@ const Addrequest = () => {
     const signer = provider.getSigner();
     const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
     try {
-      await campaign.createRequest(
+      const info = await campaign.createRequest(
         formInfo.description,
         formInfo.value,
         formInfo.recepient
       );
-      history.push(`/campaign/${address}/requests`);
+      const temp = await info.wait();
+      if (temp) history.push(`/campaign/${address}/requests`);
     } catch (error) {
       alert(error.message || "Something went wrong");
     }
