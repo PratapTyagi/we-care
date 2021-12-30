@@ -2,18 +2,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  background-color: white;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  margin: 0;
+  padding: 5px 20px;
 }
 
 .navbar > .link > h1 {
+  font-size: 33px;
   font-weight: 400 !important;
   color: var(--theame-color) !important;
   cursor: pointer;
-  margin: 0;
-  padding: 20px 0;
 }
 
 .navbar__right {
@@ -22,17 +18,16 @@
 }
 
 .navbar__right > a {
-  padding: 28px;
   margin: 0 20px;
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 500;
   text-decoration: none;
   color: var(--font-color);
 }
 
 .navbar__right > a:hover {
-  background-color: whitesmoke;
-  transition: background-color 0.5s ease-out;
+  color: var(--theame-color);
+  transition: color 0.5s ease-out;
 }
 
 .navbar__right > a > img {
@@ -40,25 +35,4 @@
   width: 15px;
   margin: 0px;
   background-color: whitesmoke;
-}
-
-.link {
-  margin: 0 20px 0 20px !important;
-  padding: 0 !important;
-}
-
-.navbar__right > .link > .navbar__right__add {
-  font-size: 20px;
-  font-weight: 800;
-  padding: 0px 8px 5px 8px;
-  color: var(--theame-color);
-  border: 2px solid var(--theame-color);
-  border-radius: 100%;
-  cursor: pointer;
-}
-
-.navbar__right > .link > .navbar__right__add:hover {
-  background-color: var(--theame-color);
-  color: white;
-  transition: background-color 0.3s ease-out;
 }

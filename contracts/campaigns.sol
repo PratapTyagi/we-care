@@ -1,19 +1,5 @@
 pragma solidity ^0.4.17;
 
-contract Factory {
-    address[] campaigns;
-    
-    function addCampaign(uint minimumContribution, string _imageHash, string _title, string _description) public {
-        address newCampaign = new Campaign(minimumContribution, msg.sender, _imageHash, _title, _description);
-        campaigns.push(newCampaign);
-    }
-    
-    function getCampaigns() public view returns(address[]) {
-        return campaigns;
-    }
-    
-}
-
 contract Campaign {
     
     struct Request {
@@ -39,7 +25,7 @@ contract Campaign {
     string public title;
     string public campaignDescription;
 
-    constructor (uint value, address creator, string _imageHash, string _title, string _description) public {
+    function Campaign (uint value, address creator, string _imageHash, string _title, string _description) public {
         minimumContribution = value;
         manager = creator;
         image = _imageHash;
@@ -58,6 +44,7 @@ contract Campaign {
     
     function contribute() public payable {
         require(minimumContribution < msg.value);
+        if(contributors[msg.sender] == true) return;
         contributors[msg.sender] = true;
         contributorsCount++;
     }

@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   background-color: whitesmoke;
   --theame-color: rgb(117, 212, 27);
@@ -12,4 +16,23 @@ body {
 
 .app {
   text-align: center;
+}
+
+button {
+  color: whitesmoke;
+  background-color: initial;
+  outline: none;
+  border: none;
+  background-color: rgb(168, 248, 93);
+  border-radius: 30px;
+  padding: 10px;
+  cursor: pointer;
+  align-self: center;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+button:hover {
+  background-color: var(--theame-color);
+  transition: background-color 0.3s ease-out;
 }

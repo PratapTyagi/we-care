@@ -1,8 +1,8 @@
 import { Link, useParams } from "react-router-dom";
 import "./ViewDetails.css";
-import Campaign from "../../campaign.js";
+import CampaignJSON from "../../abi/Campaign.json";
+import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import web3 from "../../web3";
 
 const ViewDetails = () => {
   const { address } = useParams();
@@ -19,53 +19,63 @@ const ViewDetails = () => {
   const [account, setAccount] = useState("");
 
   // Current Account and is it contributor
-  useEffect(() => {
-    const accounts = async () => await web3.eth.getAccounts();
-    accounts()
-      .then((currAccount) => {
-        setAccount(currAccount[0]);
-        const campaign = Campaign(address);
-        const contributorOrNot = async () =>
-          await campaign.methods.isContributor(currAccount[0]).call();
+  useEffect(async () => {
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    setAccount(accounts[0]);
 
-        contributorOrNot()
-          .then((data) => setIsContributor(data))
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
-  }, [isContributor, account]);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
+    setIsContributor(await campaign.isContributor(accounts[0]));
+  }, [isContributor, account, campaignSummary]);
 
   // Current campaign info
-  useEffect(() => {
-    const campaign = Campaign(address);
-    const t = async () => await campaign.methods.getSummary().call();
-    t()
-      .then((data) =>
-        setcampaignSummary({
-          balance: data[0],
-          minimumContribution: parseInt(data[1]) + 1 + "",
-          totalRequests: data[2],
-          contributersCount: data[3],
-          manager: data[4],
-        })
-      )
-      .catch((err) => console.log(err));
+  useEffect(async () => {
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
+    try {
+      const data = await campaign.getSummary();
+      setcampaignSummary({
+        balance: parseInt(data[0].toString()) / Math.pow(10, 18) - 1,
+        minimumContribution: parseInt(data[1].toString()) + "",
+        totalRequests: data[2].toString(),
+        contributersCount: data[3].toString(),
+        manager: data[4],
+      });
+    } catch (error) {
+      console.log(error.message || "Something went wrong");
+    }
   }, [campaignSummary]);
 
   const contribute = async (e) => {
     e.preventDefault();
-    const campaign = Campaign(address);
-    const accounts = await web3.eth.getAccounts();
-    try {
-      setLoading(true);
-      await campaign.methods.contribute().send({
-        from: accounts[0],
-        value: value,
-      });
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      alert(error.message);
+    if (!value) {
+      return alert("Put some ethers value");
+    }
+    if (typeof window.ethereum !== undefined) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await provider.getSigner();
+      let contract = new ethers.Contract(address, CampaignJSON.abi, signer);
+      try {
+        setLoading(true);
+        const info = await contract.contribute({
+          value: ethers.utils.parseEther(value),
+        });
+        await info.wait();
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
     }
   };
 
@@ -86,7 +96,7 @@ const ViewDetails = () => {
             <p>{parseInt(campaignSummary.balance) + 1} wei</p>
           </div>
           <div className="card second">
-            <p>Minimum Contribution</p>
+            <p>Min. Contribution</p>
             <p>{campaignSummary.minimumContribution} wei</p>
           </div>
         </div>
@@ -101,17 +111,7 @@ const ViewDetails = () => {
           </div>
         </div>
         {isContributor || campaignSummary.manager === account ? (
-          <Link
-            className="link"
-            to={{
-              pathname: `/campaign/${address}/requests`,
-              state: {
-                totalRequests: parseInt(campaignSummary.totalRequests),
-                manager: campaignSummary.manager,
-                isContributor: isContributor,
-              },
-            }}
-          >
+          <Link className="link" to={`/campaign/${address}/requests`}>
             <button>View Requests</button>
           </Link>
         ) : null}
@@ -122,7 +122,7 @@ const ViewDetails = () => {
         <input
           type="text"
           placeholder={`Minimum ${campaignSummary.minimumContribution} wei`}
-          value={value}
+          defaultValue={value}
           onChange={(e) => setvalue(e.target.value)}
         />
         {loading && <p className="loading"></p>}

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import web3 from "../../web3.js";
-import Campaign from "../../campaign";
+import CampaignJSON from "../../abi/Campaign.json";
+import { ethers } from "ethers";
 import { useHistory, useParams } from "react-router-dom";
 
 import "./Addrequest.css";
@@ -21,18 +21,22 @@ const Addrequest = () => {
     )
       return alert("Empty inputs");
 
-    const accounts = await web3.eth.getAccounts();
-    const campaign = Campaign(address);
+    if (typeof window.ethereum == undefined) {
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
     try {
-      await campaign.methods
-        .createRequest(formInfo.description, formInfo.value, formInfo.recepient)
-        .send({
-          from: accounts[0],
-          gas: "1000000",
-        });
-      history.push(`/campaign/${address}/requests`);
+      const info = await campaign.createRequest(
+        formInfo.description,
+        formInfo.value,
+        formInfo.recepient
+      );
+      const temp = await info.wait();
+      if (temp) history.push(`/campaign/${address}/requests`);
     } catch (error) {
-      alert(error.message);
+      alert(error.message || "Something went wrong");
     }
   };
   return (
@@ -42,7 +46,7 @@ const Addrequest = () => {
         <input
           type="text"
           placeholder="Description"
-          value={formInfo.description}
+          defaultValue={formInfo.description}
           onChange={(e) =>
             setFormInfo({ ...formInfo, description: e.target.value })
           }
@@ -50,13 +54,13 @@ const Addrequest = () => {
         <input
           type=""
           placeholder="Amount required"
-          value={formInfo.value}
+          defaultValue={formInfo.value}
           onChange={(e) => setFormInfo({ ...formInfo, value: e.target.value })}
         />
         <input
           type="text"
           placeholder="Receipient"
-          value={formInfo.recepient}
+          defaultValue={formInfo.recepient}
           onChange={(e) =>
             setFormInfo({ ...formInfo, recepient: e.target.value })
           }
