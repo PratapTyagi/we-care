@@ -28,6 +28,14 @@
   display: none;
 }
 
+.table {
+  overflow-y: auto;
+}
+thead {
+  position: sticky;
+  top: 0;
+}
+
 th {
   color: rgb(98, 96, 96);
 }

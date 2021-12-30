@@ -142,7 +142,7 @@ const ViewRequests = () => {
         </Link>
       ) : null}
       <div className="viewRequests__inner">
-        <table className="table table-borderless container">
+        <table className="table table-borderless table-hover container">
           <thead className="table-active">
             <tr>
               <th scope="col">Id</th>
