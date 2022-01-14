@@ -11,44 +11,38 @@ const Home = () => {
 
   // Details of campaign corresponding to address
   const singleCampaignDetail = async (address) => {
-    if (typeof window.ethereum !== undefined) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = await provider.getSigner();
-      const contract = new ethers.Contract(address, CampaignJSON.abi, signer);
-      try {
-        const data = await contract.getDetails();
-        return {
-          address,
-          manager: data[0],
-          title: data[1],
-          campaignDescription: data[2],
-          image: data[3],
-        };
-      } catch (error) {
-        console.log(error);
-      }
+    const provider = new ethers.providers.InfuraProvider("rinkeby");
+    const contract = new ethers.Contract(address, CampaignJSON.abi, provider);
+    try {
+      const data = await contract.getDetails();
+      return {
+        address,
+        manager: data[0],
+        title: data[1],
+        campaignDescription: data[2],
+        image: data[3],
+      };
+    } catch (error) {
+      console.log(error);
     }
   };
 
   // Get Campaign addresses
   const getCampaignAddresses = async () => {
-    if (typeof window.ethereum !== undefined) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = await provider.getSigner();
-      let contract = new ethers.Contract(
-        FactoryJSON.address,
-        FactoryJSON.abi,
-        signer
-      );
-      try {
-        let campaignAddress = await contract.getCampaigns();
-        for (let index = 0; index < campaignAddress.length; index++) {
-          const detail = await singleCampaignDetail(campaignAddress[index]);
-          setCampaignDetails((prevItem) => [...prevItem, detail]);
-        }
-      } catch (error) {
-        console.log(error);
+    const provider = new ethers.providers.InfuraProvider("rinkeby");
+    let contract = new ethers.Contract(
+      FactoryJSON.address,
+      FactoryJSON.abi,
+      provider
+    );
+    try {
+      let campaignAddress = await contract.getCampaigns();
+      for (let index = 0; index < campaignAddress.length; index++) {
+        const detail = await singleCampaignDetail(campaignAddress[index]);
+        setCampaignDetails((prevItem) => [...prevItem, detail]);
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 

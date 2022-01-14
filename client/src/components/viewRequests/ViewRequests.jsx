@@ -32,12 +32,8 @@ const ViewRequests = () => {
 
   // Current campaign info
   useEffect(async () => {
-    if (typeof window.ethereum == undefined) {
-      return;
-    }
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
+    const provider = new ethers.providers.InfuraProvider("rinkeby");
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, provider);
     const data = await campaign.getSummary();
     setcampaignSummary({
       totalRequests: data[2].toString(),
@@ -47,12 +43,8 @@ const ViewRequests = () => {
 
   // Request's data
   useEffect(async () => {
-    if (typeof window.ethereum == undefined) {
-      return;
-    }
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const campaign = new ethers.Contract(address, CampaignJSON.abi, signer);
+    const provider = new ethers.providers.InfuraProvider("rinkeby");
+    const campaign = new ethers.Contract(address, CampaignJSON.abi, provider);
     try {
       let newData = [];
       for (let i = 0; i < campaignSummary.totalRequests; i++) {
