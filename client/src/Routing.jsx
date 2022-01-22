@@ -8,22 +8,13 @@ import {
   Addrequest,
 } from "./components";
 
-const getAccounts = async () => {
-  if (window && typeof window.ethereum !== undefined) {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    return accounts[0];
-  }
-};
-
 const Routing = () => {
   const [account, setAccount] = useState("");
 
   const history = useHistory();
 
   useEffect(() => {
-    const account = getAccounts();
+    const account = localStorage.getItem("accounts");
     setAccount(account);
     if (
       !account &&

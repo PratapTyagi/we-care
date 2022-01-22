@@ -1,6 +1,25 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+
 const Navbar = () => {
+  const [account, setAccount] = useState("");
+  useEffect(() => {
+    if (localStorage.getItem("accounts").length) {
+      setAccount(localStorage.getItem("accounts"));
+    }
+  }, []);
+
+  let getAccounts = async () => {
+    if (window && typeof window.ethereum !== undefined) {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      setAccount(accounts[0]);
+      localStorage.setItem("accounts", accounts[0]);
+    }
+  };
+
   return (
     <div className="navbar">
       <Link className="link" to="/" style={{ textDecoration: "none" }}>
@@ -18,6 +37,26 @@ const Navbar = () => {
         >
           Create
         </Link>
+        {account ? (
+          <button
+            onClick={() => {
+              setAccount("");
+              localStorage.removeItem("accounts");
+            }}
+            style={{
+              backgroundColor: "red",
+            }}
+          >
+            Disconnect
+          </button>
+        ) : (
+          <button
+            onClick={getAccounts}
+            style={{ backgroundColor: "rgb(117, 212, 27)" }}
+          >
+            Connect
+          </button>
+        )}
       </div>
     </div>
   );
