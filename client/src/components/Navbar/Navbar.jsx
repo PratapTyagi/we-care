@@ -5,7 +5,10 @@ import "./Navbar.css";
 const Navbar = () => {
   const [account, setAccount] = useState("");
   useEffect(() => {
-    if (localStorage.getItem("accounts").length) {
+    if (
+      localStorage.getItem("accounts") &&
+      localStorage.getItem("accounts").length
+    ) {
       setAccount(localStorage.getItem("accounts"));
     }
   }, []);
