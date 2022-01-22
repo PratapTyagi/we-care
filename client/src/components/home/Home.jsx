@@ -55,7 +55,7 @@ const Home = () => {
       <div className="left">
         <h2>Start Ups</h2>
         {campaignDetails.map((details) => (
-          <Card details={details} />
+          <Card key={details.address} details={details} />
         ))}
       </div>
       <div className="right">
