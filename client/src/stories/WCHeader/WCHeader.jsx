@@ -9,6 +9,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { AccountCircle, MoreVert as MoreIcon } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -16,10 +17,16 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     cursor: "pointer",
-    marginRight: theme.spacing(1),
   },
   title: {
     cursor: "pointer",
+  },
+  link: {
+    textDecoration: "none",
+    color: "inherit",
+    "&:hover": {
+      color: "inherit",
+    },
   },
   sectionDesktop: {
     display: "none",
@@ -132,26 +139,36 @@ const WCHeader = ({ icon, title, ...props }) => {
         <Toolbar>
           {icon && (
             <IconButton edge="start" className={classes.icon} aria-label="logo">
-              {icon}
+              <Link to="/" className={classes.link}>
+                {icon}
+              </Link>
             </IconButton>
           )}
           {title && (
             <GreenTextTypography className={classes.title} variant="h4" noWrap>
-              {title}
+              <Link to="/" className={classes.link}>
+                {title}
+              </Link>
             </GreenTextTypography>
           )}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {links?.map(({ label, icon, onClick }) => {
+            {links?.map(({ label, icon, isAccount, onClick }) => {
               return (
                 <MenuItem key={label} color="inherit" onClick={onClick}>
-                  {icon ? (
-                    icon
-                  ) : (
-                    <GreenTextTypography varient="body2">
-                      {label}
-                    </GreenTextTypography>
+                  {icon && (
+                    <IconButton edge="start" disabled={true} aria-label={label}>
+                      {icon}
+                    </IconButton>
                   )}
+                  <GreenTextTypography
+                    style={{
+                      color: isAccount ? "red" : "rgb(117, 212, 27)",
+                      ...(isAccount && { fontWeight: "bold" }),
+                    }}
+                  >
+                    {label}
+                  </GreenTextTypography>
                 </MenuItem>
               );
             })}
@@ -186,6 +203,10 @@ const WCHeader = ({ icon, title, ...props }) => {
       {renderMenu}
     </div>
   );
+};
+
+WCHeader.defaultProps = {
+  menuOptions: [],
 };
 
 export default WCHeader;

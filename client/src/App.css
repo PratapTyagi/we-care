@@ -10,6 +10,7 @@
 
 body {
   background-color: whitesmoke;
+  font-family: "Montserrat", sans-serif;
   --theame-color: rgb(117, 212, 27);
   --font-color: grey;
 }

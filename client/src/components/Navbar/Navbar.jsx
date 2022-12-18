@@ -1,68 +1,49 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { GitHub as GitHubIcon } from "@material-ui/icons";
+
+import WCHeader from "../../stories/WCHeader/WCHeader";
+import { EthereumContext } from "../../contexts/";
 import "./Navbar.css";
 
-const Navbar = () => {
-  const [account, setAccount] = useState("");
-  useEffect(() => {
-    if (
-      localStorage.getItem("accounts") &&
-      localStorage.getItem("accounts").length
-    ) {
-      setAccount(localStorage.getItem("accounts"));
-    }
-  }, []);
+const MY_GITHUB_REPOSITORY = "https://github.com/PratapTyagi";
 
-  let getAccounts = async () => {
-    if (window && typeof window.ethereum !== undefined) {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      setAccount(accounts[0]);
-      localStorage.setItem("accounts", accounts[0]);
+const Navbar = () => {
+  const { account, addAccount, removeAccount } = useContext(EthereumContext);
+  const history = useHistory();
+
+  const toggleAccount = () => {
+    if (account.length !== 0) {
+      removeAccount();
+      return;
     }
+    addAccount();
   };
 
-  return (
-    <div className="navbar">
-      <Link className="link" to="/" style={{ textDecoration: "none" }}>
-        <h1>WeCare</h1>
-      </Link>
-      <div className="navbar__right">
-        <a href="https://github.com/PratapTyagi">
-          <img src="https://cdn.afterdawn.fi/v3/news/original/github-logo.png" />{" "}
-          Github
-        </a>
-        <Link
-          to="/campaigns/new"
-          className="link"
-          style={{ textDecoration: "none" }}
-        >
-          Create
-        </Link>
-        {account ? (
-          <button
-            onClick={() => {
-              setAccount("");
-              localStorage.removeItem("accounts");
-            }}
-            style={{
-              backgroundColor: "red",
-            }}
-          >
-            Disconnect
-          </button>
-        ) : (
-          <button
-            onClick={getAccounts}
-            style={{ backgroundColor: "rgb(117, 212, 27)" }}
-          >
-            Connect
-          </button>
-        )}
-      </div>
-    </div>
-  );
+  const links = [
+    {
+      label: "Github",
+      icon: <GitHubIcon />,
+      onClick: () => {
+        window.open(MY_GITHUB_REPOSITORY, "_blank");
+      },
+    },
+    {
+      label: "Create",
+      onClick: () => {
+        history.push("/create");
+      },
+    },
+    {
+      label: account ? "Disconnect" : "Connect",
+      isAccount: account.length,
+      onClick: () => {
+        toggleAccount();
+      },
+    },
+  ];
+
+  return <WCHeader title="We Care" links={links} />;
 };
 
 export default Navbar;
