@@ -100,14 +100,22 @@ const WCHeader = ({ icon, title, ...props }) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {links?.map(({ label, icon, onClick }) => {
+      {links?.map(({ label, icon, isAccount, onClick }) => {
         return (
           <MenuItem key={label} color="inherit" onClick={onClick}>
-            {icon ? (
-              <IconButton color="inherit">{icon}</IconButton>
-            ) : (
-              <Typography varient="body2">{label}</Typography>
+            {icon && (
+              <IconButton edge="start" disabled={true} aria-label={label}>
+                {icon}
+              </IconButton>
             )}
+            <Typography
+              style={{
+                color: isAccount ? "red" : "rgb(117, 212, 27)",
+                ...(isAccount && { fontWeight: "bold" }),
+              }}
+            >
+              {label}
+            </Typography>
           </MenuItem>
         );
       })}
