@@ -1,32 +1,21 @@
 import React from "react";
-import {
-  createTheme,
-  makeStyles,
-  ThemeProvider,
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { green } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   cardWrap: {
-    padding: " 1.25rem 1rem 1rem 1.25rem",
-    minHeight: " fit-content",
+    cursor: "pointer",
+    position: "relative",
+    minHeight: " 100%",
     maxHeight: " 100%",
-    width: "21rem",
+    width: "40vw",
     boxSizing: " border-box",
-    boxShadow: " 0px 0.25rem 4rem rgba(109, 109, 109, 0.2) !important",
-    borderRadius: " 1rem !important",
+    boxShadow: " 0.5rem 0.5rem 4rem rgba(109, 109, 109, 0.3) !important",
+    borderRadius: " .5rem !important",
     backgroundColor: "whitesmoke",
     position: " relative",
     marginBottom: " 2rem !important",
@@ -37,21 +26,16 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 0,
-    paddingTop: "56.25%", // 16:9
-  },
-  expand: {
-    marginLeft: "auto",
+    paddingTop: "60.5%", // 16:9
   },
   avatar: {
-    backgroundColor: green[500],
+    backgroundColor: "#2a2a2a",
+    color: "var(--theame-color)",
+    position: "absolute",
+    top: "2%",
+    left: "2%",
   },
 }));
-
-const theme = createTheme({
-  palette: {
-    primary: green,
-  },
-});
 
 function WCCard(props) {
   const classes = useStyles();
@@ -59,41 +43,18 @@ function WCCard(props) {
 
   return (
     <Card className={classes.cardWrap}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            {avatar}
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={title}
-        subheader={createdAt}
-      />
+      <Avatar className={classes.avatar}>{avatar}</Avatar>
       <CardMedia className={classes.media} image={imageSrc} title={title} />
-      {description && (
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h1">
+          {title}
+        </Typography>
+        {description && (
+          <Typography variant="p" color="textSecondary" component="p">
             {description}
           </Typography>
-        </CardContent>
-      )}
-      <CardActions>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <ThemeProvider theme={theme}>
-          <Button variant="contained" color="primary">
-            More Details
-          </Button>
-        </ThemeProvider>
-      </CardActions>
+        )}
+      </CardContent>
     </Card>
   );
 }

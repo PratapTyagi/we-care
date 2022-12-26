@@ -15,7 +15,7 @@ const Home = () => {
         display="flex"
         flexDirection="row"
         flexWrap="wrap"
-        justifyContent="start"
+        justifyContent="space-between"
         pt={3}
         pb={2}
       >
