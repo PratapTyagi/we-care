@@ -9,6 +9,11 @@ const provider =
     ? new ethers.providers.WebSocketProvider("ws://127.0.0.1:8545")
     : new ethers.providers.InfuraProvider("goerli");
 
+const dateConversion = (date) => {
+  const newDate = new Date(date.toNumber() * 1000);
+  return newDate.toLocaleDateString() + "";
+};
+
 // For updating, metamask interaction is neccessory for any client
 const fetchSignerForUpdation = async () => {
   if (!window.ethereum) {
@@ -34,6 +39,7 @@ export const fetchCampaignDetail = async (address) => {
       title: data[1],
       campaignDescription: data[2],
       image: data[3],
+      createdAt: dateConversion(data[4]),
     };
   } catch (error) {
     console.log(error);
@@ -64,7 +70,7 @@ export const fetchCampaigns = async () => {
 
 // Create campaign
 export const createNewCampaign = async (props) => {
-  const { buffer, amount, title, description } = props;
+  const { amount, title, description } = props;
   const signer = await fetchSignerForUpdation();
   if (!Object.entries(signer).length) return;
   let contract = new ethers.Contract(

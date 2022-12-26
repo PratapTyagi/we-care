@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   createTheme,
   makeStyles,
@@ -12,15 +12,28 @@ import CardActions from "@material-ui/core/CardActions";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { green, red } from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { Box, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
+  cardWrap: {
+    padding: " 1.25rem 1rem 1rem 1.25rem",
+    minHeight: " fit-content",
+    maxHeight: " 100%",
+    width: "21rem",
+    boxSizing: " border-box",
+    boxShadow: " 0px 0.25rem 4rem rgba(109, 109, 109, 0.2) !important",
+    borderRadius: " 1rem !important",
+    backgroundColor: "whitesmoke",
+    position: " relative",
+    marginBottom: " 2rem !important",
+    marginRight: " 2rem !important",
+    "&:hover": {
+      backgroundColor: "white",
+    },
   },
   media: {
     height: 0,
@@ -43,14 +56,9 @@ const theme = createTheme({
 function WCCard(props) {
   const classes = useStyles();
   const { description, title, imageSrc, avatar, createdAt } = props;
-  const [expanded, setExpanded] = useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.cardWrap}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>

@@ -22,7 +22,7 @@ const CreateCampaignPage = () => {
 
   useEffect(() => {
     refetchCampaigns();
-  }, [createNewCampaignSuccess]);
+  }, [createNewCampaignSuccess, refetchCampaigns]);
 
   const handleCreateCampaign = (e) => {
     e.preventDefault();
