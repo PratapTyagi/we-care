@@ -15,7 +15,6 @@ const useFetchCampaigns = () => {
       return data;
     },
     {
-      enabled: !!account,
       retry: 2,
       retryDelay: 3,
       staleTime: 5 * 60 * 1000,
