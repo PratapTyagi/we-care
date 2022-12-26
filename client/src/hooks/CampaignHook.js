@@ -1,20 +1,36 @@
 import { useContext } from "react";
 import { useMutation, useQuery } from "react-query";
 import { EthereumContext, ToasterContext } from "../contexts";
-import { createNewCampaign, fetchCampaigns } from "../helpers/functions";
+import {
+  createNewCampaign,
+  fetchCampaigns,
+  fetchCampaignSummary,
+} from "../helpers/functions";
 
 const CAMPAIGNS = "campaigns";
 
 const useFetchCampaigns = () => {
   const { showToast } = useContext(ToasterContext);
-  const { account } = useContext(EthereumContext);
-  return useQuery(
-    [CAMPAIGNS],
-    async () => {
-      const data = await fetchCampaigns();
+  return useQuery([CAMPAIGNS], async () => await fetchCampaigns(), {
+    retry: 2,
+    retryDelay: 3,
+    staleTime: 5 * 60 * 1000,
+    onSettled: (data, error) => {
+      if (error) {
+        showToast({ type: "error", message: error });
+      }
       return data;
     },
+  });
+};
+
+const useFetchCampaignSummary = (address) => {
+  const { showToast } = useContext(ToasterContext);
+  return useQuery(
+    [`${CAMPAIGNS}:${address}`],
+    async () => await fetchCampaignSummary(address),
     {
+      enabled: !!address,
       retry: 2,
       retryDelay: 3,
       staleTime: 5 * 60 * 1000,
@@ -53,4 +69,4 @@ const useCampaignMutation = (callback) => {
   return { createCampaign };
 };
 
-export { useFetchCampaigns, useCampaignMutation };
+export { useFetchCampaigns, useFetchCampaignSummary, useCampaignMutation };

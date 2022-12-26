@@ -2,8 +2,10 @@ import React from "react";
 import { Box, Container } from "@material-ui/core";
 import { WCCard } from "../stories";
 import { useFetchCampaigns } from "../hooks/CampaignHook";
+import { useHistory } from "react-router-dom";
 
 const Home = () => {
+  const history = useHistory();
   const { data: campaigns, isLoading: campaignsLoading } = useFetchCampaigns();
   if (campaignsLoading) return <>Loading...</>;
 
@@ -27,6 +29,7 @@ const Home = () => {
               title={campaign.title}
               imageSrc={campaign.image || ""}
               createdAt={campaign.createdAt}
+              onCardClick={() => history.push(`/campaign/${campaign.address}`)}
             />
           ))}
       </Box>

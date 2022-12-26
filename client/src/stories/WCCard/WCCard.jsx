@@ -40,9 +40,10 @@ const useStyles = makeStyles((theme) => ({
 function WCCard(props) {
   const classes = useStyles();
   const { description, title, imageSrc, avatar, createdAt } = props;
+  const { onCardClick } = props;
 
   return (
-    <Card className={classes.cardWrap}>
+    <Card className={classes.cardWrap} onClick={onCardClick}>
       <Avatar className={classes.avatar}>{avatar}</Avatar>
       <CardMedia className={classes.media} image={imageSrc} title={title} />
       <CardContent>
