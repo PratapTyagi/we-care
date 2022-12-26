@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
+    marginBottom: 40,
   },
   icon: {
     cursor: "pointer",

@@ -5,13 +5,13 @@ import {
   ViewRequests,
   Addrequest,
 } from "./components";
-import { Home } from "./pages";
+import { CreateCampaignPage, Home } from "./pages";
 
 const Routing = () => {
   return (
     <>
       <Route path="/" exact component={Home} />
-      <Route path="/campaigns/new" exact component={NewCampaign} />
+      <Route path="/campaigns/create" exact component={CreateCampaignPage} />
       <Route path="/campaign/:address" exact component={ViewDetails} />
       <Route
         path="/campaign/:address/requests"

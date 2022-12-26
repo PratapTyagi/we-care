@@ -50,6 +50,7 @@ export const Default = () => {
       value: "picture",
       accept: "image/* .jpg, .jpeg, .png, .bmp, .gif",
       type: "file",
+      uploadTitle: "Upload your campaign picture",
       onChange: handleFileChange,
     },
   ];

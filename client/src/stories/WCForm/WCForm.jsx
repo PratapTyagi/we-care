@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { makeStyles, Input, Button } from "@material-ui/core";
+import { makeStyles, Input, Button, Tooltip } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -39,21 +39,33 @@ const WCForm = (props) => {
 
           return (
             <React.Fragment key={input.value}>
-              <Input
-                type={type}
-                onChange={onChange}
-                placeholder={name}
-                id={value}
-                style={type === "file" ? { display: "none" } : {}}
-                {...(type != "file" ? { value: values[value] } : {})}
-                {...rest}
-              />
-              {type === "file" && (
-                <label htmlFor={value}>
-                  <Button variant="raised" component="span">
-                    Upload
-                  </Button>
-                </label>
+              {type === "file" ? (
+                <>
+                  <br />
+                  <input
+                    id={value}
+                    type={type}
+                    onChange={onChange}
+                    accept={rest.accept}
+                    style={{ display: "none" }}
+                  />
+                  <label htmlFor={value}>
+                    <Tooltip title={rest.uploadTitle}>
+                      <Button id={value} variant="raised" component="span">
+                        Upload
+                      </Button>
+                    </Tooltip>
+                  </label>
+                </>
+              ) : (
+                <Input
+                  type={type}
+                  onChange={onChange}
+                  placeholder={name}
+                  id={value}
+                  {...(type != "file" ? { value: values[value] } : {})}
+                  {...rest}
+                />
               )}
             </React.Fragment>
           );

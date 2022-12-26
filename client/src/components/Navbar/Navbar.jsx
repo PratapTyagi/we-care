@@ -4,7 +4,6 @@ import { GitHub as GitHubIcon } from "@material-ui/icons";
 
 import WCHeader from "../../stories/WCHeader/WCHeader";
 import { EthereumContext } from "../../contexts/";
-import "./Navbar.css";
 
 const MY_GITHUB_REPOSITORY = "https://github.com/PratapTyagi";
 
@@ -31,7 +30,7 @@ const Navbar = () => {
     {
       label: "Create",
       onClick: () => {
-        history.push("/create");
+        history.push("/campaigns/create");
       },
     },
     {

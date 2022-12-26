@@ -1,20 +1,13 @@
 import FactoryJSON from "../abi/Factory.json";
 import CampaignJSON from "../abi/Campaign.json";
 import { ethers } from "ethers";
-import { create } from "ipfs-http-client";
+// import { ipfs } from "../utils";
 
 // Provider toggle on change of environment
 const provider =
   process.env.REACT_APP_ENVIRONMENT === "localhost"
     ? new ethers.providers.WebSocketProvider("ws://127.0.0.1:8545")
     : new ethers.providers.InfuraProvider("goerli");
-
-// IPFS connection for image upload
-const ipfs = create({
-  host: "ipfs.infura.io",
-  port: 5001,
-  protocol: "https",
-});
 
 // For updating, metamask interaction is neccessory for any client
 const fetchSignerForUpdation = async () => {
@@ -70,28 +63,27 @@ export const fetchCampaigns = async () => {
 };
 
 // Create campaign
-export const createCampaign = async (props) => {
-  const { buffer, minimumamount, title, description } = props;
+export const createNewCampaign = async (props) => {
+  const { buffer, amount, title, description } = props;
   const signer = await fetchSignerForUpdation();
-  if (!signer || !signer.length) return;
+  if (!Object.entries(signer).length) return;
   let contract = new ethers.Contract(
     FactoryJSON.address,
     FactoryJSON.abi,
     signer
   );
-
-  let data;
-  if (buffer) data = await ipfs.add(buffer);
+  // let data;
+  // if (buffer) data = await ipfs.add(buffer);
 
   try {
     let info = await contract.addCampaign(
-      minimumamount,
-      data?.path || "",
+      amount,
+      // data?.path || "",
+      "",
       title,
       description
     );
-    info = await info.wait();
-    if (info) return;
+    await info.wait();
   } catch (error) {
     console.log(error);
   }
