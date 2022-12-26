@@ -63,7 +63,7 @@ const WCForm = (props) => {
                   onChange={onChange}
                   placeholder={name}
                   id={value}
-                  {...(type != "file" ? { value: values[value] } : {})}
+                  {...(type !== "file" ? { value: values[value] } : {})}
                   {...rest}
                 />
               )}

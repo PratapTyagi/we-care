@@ -1,8 +1,8 @@
 import { Box } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { EthereumContext, ToasterContext } from "../contexts";
-import { useCampaignMutation } from "../hooks/CampaignHook";
+import { useCampaignMutation, useFetchCampaigns } from "../hooks/CampaignHook";
 import WCForm from "../stories/WCForm/WCForm";
 
 const CreateCampaignPage = () => {
@@ -15,8 +15,14 @@ const CreateCampaignPage = () => {
     amount: "",
   });
 
+  const { refetch: refetchCampaigns } = useFetchCampaigns();
   const { createCampaign } = useCampaignMutation();
-  const { mutate: createNewCampaign } = createCampaign;
+  const { mutate: createNewCampaign, isSuccess: createNewCampaignSuccess } =
+    createCampaign;
+
+  useEffect(() => {
+    refetchCampaigns();
+  }, [createNewCampaignSuccess]);
 
   const handleCreateCampaign = (e) => {
     e.preventDefault();

@@ -24,21 +24,24 @@ contract Campaign {
     string public image;
     string public title;
     string public campaignDescription;
+    uint256 public createdAt;
 
-    function Campaign (uint value, address creator, string _imageHash, string _title, string _description) public {
+    function Campaign (uint value, address creator, string _imageHash, string _title, string _description, uint256 _createdAt) public {
         minimumContribution = value;
         manager = creator;
         image = _imageHash;
         title = _title;
         campaignDescription = _description;
+        createdAt = _createdAt;
     }
 
-    function getDetails() public view returns(address, string, string, string) {
+    function getDetails() public view returns(address, string, string, string, uint256) {
         return (
             manager,
             title,
             campaignDescription,
-            image
+            image,
+            createdAt
         );
     }
     

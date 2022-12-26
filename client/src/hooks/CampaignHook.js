@@ -3,13 +3,13 @@ import { useMutation, useQuery } from "react-query";
 import { EthereumContext, ToasterContext } from "../contexts";
 import { createNewCampaign, fetchCampaigns } from "../helpers/functions";
 
-const CAMPAIGN = "campaign";
+const CAMPAIGNS = "campaigns";
 
 const useFetchCampaigns = () => {
   const { showToast } = useContext(ToasterContext);
   const { account } = useContext(EthereumContext);
   return useQuery(
-    [CAMPAIGN],
+    [CAMPAIGNS],
     async () => {
       const data = await fetchCampaigns();
       return data;
