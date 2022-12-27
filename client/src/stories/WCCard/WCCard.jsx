@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: " 0.5rem 0.5rem 4rem rgba(109, 109, 109, 0.3) !important",
     borderRadius: " .5rem !important",
     backgroundColor: "whitesmoke",
-    position: " relative",
     marginBottom: " 2rem !important",
     marginRight: " 2rem !important",
     "&:hover": {
@@ -39,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 function WCCard(props) {
   const classes = useStyles();
-  const { description, title, imageSrc, avatar, createdAt } = props;
+  const { description, title, imageSrc, avatar } = props;
   const { onCardClick } = props;
 
   return (

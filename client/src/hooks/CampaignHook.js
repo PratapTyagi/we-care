@@ -1,7 +1,8 @@
 import { useContext } from "react";
-import { useMutation, useQuery } from "react-query";
-import { EthereumContext, ToasterContext } from "../contexts";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { ToasterContext } from "../contexts";
 import {
+  contributeAmount,
   createNewCampaign,
   fetchCampaigns,
   fetchCampaignSummary,
@@ -44,8 +45,10 @@ const useFetchCampaignSummary = (address) => {
   );
 };
 
-const useCampaignMutation = (callback) => {
+const useCampaignMutation = () => {
   const { showToast } = useContext(ToasterContext);
+  const queryClient = useQueryClient();
+
   const createCampaign = useMutation(
     async (props) => {
       const data = await createNewCampaign(props);
@@ -56,7 +59,6 @@ const useCampaignMutation = (callback) => {
         if (error) {
           return showToast({ type: "error", message: error });
         }
-        callback && callback();
         showToast({
           type: "success",
           message: "Successfully created campaign",
@@ -66,7 +68,28 @@ const useCampaignMutation = (callback) => {
     }
   );
 
-  return { createCampaign };
+  const makeContribution = useMutation(
+    async ({ address, amount }) => {
+      const callbackFn = async () =>
+        await queryClient.invalidateQueries(`${CAMPAIGNS}:${address}`);
+      const data = await contributeAmount(address, amount, callbackFn);
+      return data;
+    },
+    {
+      onSettled: async (response, error) => {
+        if (error) {
+          return showToast({ type: "error", message: error });
+        }
+        showToast({
+          type: "success",
+          message: "Successfully created campaign",
+        });
+        return response;
+      },
+    }
+  );
+
+  return { createCampaign, makeContribution };
 };
 
 export { useFetchCampaigns, useFetchCampaignSummary, useCampaignMutation };

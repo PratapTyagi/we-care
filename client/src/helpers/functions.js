@@ -102,7 +102,7 @@ export const fetchCampaignSummary = async (address) => {
     const campaignSummary = await fetchCampaignDetail(address);
     return {
       address,
-      balance: data[0].toNumber(),
+      balance: parseInt(data[0].toString()) / Math.pow(10, 18),
       minimumContribution: parseInt(data[1].toString()) + "",
       totalRequests: data[2].toString(),
       contributersCount: data[3].toString(),
@@ -115,15 +115,16 @@ export const fetchCampaignSummary = async (address) => {
 };
 
 // Function for user to make a contribution in a campaign
-export const contributeAmount = async (address, amount) => {
+export const contributeAmount = async (address, amount, callbackFn) => {
   const signer = await fetchSignerForUpdation();
-  if (!signer || !signer.length) return;
+  if (!Object.entries(signer).length) return;
   const contract = new ethers.Contract(address, CampaignJSON.abi, signer);
   try {
     const info = await contract.contribute({
       value: ethers.utils.parseEther(amount),
     });
     await info.wait();
+    callbackFn();
   } catch (error) {
     console.log(error);
   }

@@ -2,15 +2,21 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Box, CardMedia, Typography } from "@material-ui/core";
 import { ContributionCard } from "../components";
-import { useFetchCampaignSummary } from "../hooks/CampaignHook";
+import {
+  useCampaignMutation,
+  useFetchCampaignSummary,
+} from "../hooks/CampaignHook";
 
 const CampaignDetailsPage = () => {
   const { address } = useParams();
   const { data: campaignSummary, isLoading: campaignSummaryLoading } =
     useFetchCampaignSummary(address);
 
-  const handleContribution = () => {
-    console.log("Contributed");
+  const { makeContribution } = useCampaignMutation();
+  const { mutate: contribute } = makeContribution;
+
+  const handleContribution = (amount) => {
+    contribute({ address, amount });
   };
 
   if (campaignSummaryLoading) return <>Loading ...</>;
