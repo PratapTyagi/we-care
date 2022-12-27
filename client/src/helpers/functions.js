@@ -35,7 +35,6 @@ export const fetchCampaignDetail = async (address) => {
     const data = await contract.getDetails();
     return {
       address,
-      manager: data[0],
       title: data[1],
       campaignDescription: data[2],
       image: data[3],
@@ -100,12 +99,15 @@ export const fetchCampaignSummary = async (address) => {
   const campaign = new ethers.Contract(address, CampaignJSON.abi, provider);
   try {
     const data = await campaign.getSummary();
+    const campaignSummary = await fetchCampaignDetail(address);
     return {
-      balance: parseInt(data[0].toString()) / Math.pow(10, 18) - 1,
+      address,
+      balance: data[0].toNumber(),
       minimumContribution: parseInt(data[1].toString()) + "",
       totalRequests: data[2].toString(),
       contributersCount: data[3].toString(),
       manager: data[4],
+      ...campaignSummary,
     };
   } catch (error) {
     console.log(error.message || "Something went wrong");
