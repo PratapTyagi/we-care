@@ -44,7 +44,11 @@ function WCCard(props) {
   return (
     <Card className={classes.cardWrap} onClick={onCardClick}>
       <Avatar className={classes.avatar}>{avatar}</Avatar>
-      <CardMedia className={classes.media} image={imageSrc} title={title} />
+      <CardMedia
+        className={classes.media}
+        image={imageSrc || "/images/startup.svg"}
+        title={title}
+      />
       <CardContent>
         <Typography gutterBottom variant="h5" component="h1">
           {title}

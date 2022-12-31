@@ -45,7 +45,11 @@ const CampaignDetailsPage = () => {
               paddingTop: "55.5%",
               width: "55vw",
             }}
-            image="/images/dizzy-programmer-writes-code-on-a-laptop_adobe_express.svg"
+            image={
+              campaignSummary.image.length
+                ? campaignSummary.image
+                : "/images/startup.svg"
+            }
             title={campaignSummary.title}
           />
         </Box>

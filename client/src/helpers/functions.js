@@ -1,7 +1,11 @@
 import FactoryJSON from "../abi/Factory.json";
 import CampaignJSON from "../abi/Campaign.json";
 import { ethers } from "ethers";
+import { uploadMedia } from "../utils";
 // import { ipfs } from "../utils";
+
+const CLOUDINARY_URL = `https://res.cloudinary.com`;
+const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 
 // Provider toggle on change of environment
 const provider =
@@ -33,11 +37,16 @@ export const fetchCampaignDetail = async (address) => {
   const contract = new ethers.Contract(address, CampaignJSON.abi, provider);
   try {
     const data = await contract.getDetails();
+
+    let image;
+    if (data[3].length)
+      image = `${CLOUDINARY_URL}/${CLOUD_NAME}/image/upload/w_200,h_100,c_fill,q_100/${data[3]}.jpg`;
+
     return {
       address,
       title: data[1],
       campaignDescription: data[2],
-      image: data[3],
+      image: image || "",
       createdAt: dateConversion(data[4]),
     };
   } catch (error) {
@@ -69,7 +78,7 @@ export const fetchCampaigns = async () => {
 
 // Create campaign
 export const createNewCampaign = async (props) => {
-  const { amount, title, description } = props;
+  const { amount, title, description, file, onUploadProgress } = props;
   const signer = await fetchSignerForUpdation();
   if (!Object.entries(signer).length) return;
   let contract = new ethers.Contract(
@@ -77,14 +86,15 @@ export const createNewCampaign = async (props) => {
     FactoryJSON.abi,
     signer
   );
-  // let data;
+  let data;
   // if (buffer) data = await ipfs.add(buffer);
+  if (file) data = await uploadMedia({ file, onUploadProgress });
 
   try {
     let info = await contract.addCampaign(
       amount,
       // data?.path || "",
-      "",
+      data?.public_id || "",
       title,
       description
     );

@@ -8,7 +8,7 @@ import WCForm from "../stories/WCForm/WCForm";
 const CreateCampaignPage = () => {
   const { showToast } = useContext(ToasterContext);
   const { account } = useContext(EthereumContext);
-  const [buffer, setBuffer] = useState("");
+  const [file, setFile] = useState("");
   const [values, setValues] = useState({
     title: "",
     description: "",
@@ -24,6 +24,11 @@ const CreateCampaignPage = () => {
     refetchCampaigns();
   }, [createNewCampaignSuccess, refetchCampaigns]);
 
+  const handleFileUploadProgress = (e) => {
+    console.log("File Uploading ...");
+    console.log(e.loaded / e.total);
+  };
+
   const handleCreateCampaign = (e) => {
     e.preventDefault();
     if (
@@ -36,19 +41,17 @@ const CreateCampaignPage = () => {
         message: "Must have correct amount, title, description",
       });
 
-    createNewCampaign({ ...values, buffer });
+    createNewCampaign({
+      ...values,
+      file,
+      onUploadProgress: handleFileUploadProgress,
+    });
   };
 
   const handleFileChange = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
-    // Making buffer type
-    const reader = new window.FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.onloadend = async () => {
-      const buffer = await Buffer.from(reader.result);
-      setBuffer(buffer);
-    };
+    setFile(file);
   };
 
   const inputs = [
