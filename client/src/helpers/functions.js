@@ -112,8 +112,8 @@ export const fetchCampaignSummary = async (address) => {
     const campaignSummary = await fetchCampaignDetail(address);
     return {
       address,
-      balance: parseInt(data[0].toString()) / Math.pow(10, 18),
-      minimumContribution: parseInt(data[1].toString()) + "",
+      balance: ethers.utils.formatUnits(data[0], "wei"),
+      minimumContribution: ethers.utils.formatUnits(data[1], "wei"),
       totalRequests: data[2].toString(),
       contributersCount: data[3].toString(),
       manager: data[4],
@@ -131,7 +131,7 @@ export const contributeAmount = async (address, amount, callbackFn) => {
   const contract = new ethers.Contract(address, CampaignJSON.abi, signer);
   try {
     const info = await contract.contribute({
-      value: ethers.utils.parseEther(amount),
+      value: amount,
     });
     await info.wait();
     callbackFn();

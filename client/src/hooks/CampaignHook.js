@@ -82,7 +82,7 @@ const useCampaignMutation = () => {
         }
         showToast({
           type: "success",
-          message: "Successfully created campaign",
+          message: "Successfully made contribution",
         });
         return response;
       },

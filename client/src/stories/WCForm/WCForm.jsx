@@ -51,7 +51,7 @@ const WCForm = (props) => {
                   />
                   <label htmlFor={value}>
                     <Tooltip title={rest.uploadTitle}>
-                      <Button id={value} variant="raised" component="span">
+                      <Button id={value} variant="text" component="span">
                         Upload
                       </Button>
                     </Tooltip>

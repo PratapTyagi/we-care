@@ -54,7 +54,7 @@ function WCCard(props) {
           {title}
         </Typography>
         {description && (
-          <Typography variant="p" color="textSecondary" component="p">
+          <Typography color="textSecondary" component="p">
             {description}
           </Typography>
         )}
