@@ -116,7 +116,7 @@ export const fetchCampaignSummary = async (address) => {
       minimumContribution: ethers.utils.formatUnits(data[1], "wei"),
       totalRequests: data[2].toString(),
       contributersCount: data[3].toString(),
-      manager: data[4],
+      manager: data[4].toLowerCase(),
       ...campaignSummary,
     };
   } catch (error) {
@@ -150,7 +150,7 @@ export const fetchIsContributor = async (address, account) => {
 export const createRequest = async ({
   address,
   description,
-  value,
+  amount,
   recepient,
   callbackFn,
 }) => {
@@ -159,9 +159,55 @@ export const createRequest = async ({
   const contract = new ethers.Contract(address, CampaignJSON.abi, signer);
 
   try {
-    const info = await contract.createRequest(description, value, recepient);
+    const info = await contract.createRequest(description, amount, recepient);
     const temp = await info.wait();
     if (temp) callbackFn();
+  } catch (error) {
+    alert(error.message || "Something went wrong");
+  }
+};
+
+export const fetchRequestsInfo = async ({ address, totalRequests }) => {
+  const contract = new ethers.Contract(address, CampaignJSON.abi, provider);
+
+  try {
+    let newData = [];
+    for (let i = 0; i < totalRequests; i++) {
+      let request = await contract.requests(i);
+      request = {
+        ...request,
+        2: request[2].toString(),
+        4: request[4].toString(),
+      };
+      newData.push(request);
+    }
+    return newData;
+  } catch (error) {
+    alert(error);
+  }
+};
+
+// Approve request of campaign
+export const approveRequest = async ({ address, index }) => {
+  const signer = await fetchSignerForUpdation();
+  if (!Object.entries(signer).length) return;
+  const contract = new ethers.Contract(address, CampaignJSON.abi, signer);
+
+  try {
+    let info = await contract.approveRequest(index);
+    await info.wait();
+  } catch (error) {
+    alert(error.message || "Something went wrong");
+  }
+};
+
+// Finalize request of campaign
+export const finalizeRequest = async ({ address, index }) => {
+  const signer = await fetchSignerForUpdation();
+  if (!Object.entries(signer).length) return;
+  const contract = new ethers.Contract(address, CampaignJSON.abi, signer);
+  try {
+    await contract.finalizeRequest(index);
   } catch (error) {
     alert(error.message || "Something went wrong");
   }

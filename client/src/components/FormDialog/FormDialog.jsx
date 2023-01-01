@@ -17,40 +17,40 @@ const useStyles = makeStyles({
     backgroundColor: "var(--theame-color) !important",
   },
 });
-function FormDialog(props) {
-  const { isOpen, minimumContribution } = props;
-  const { onClose, onContribute } = props;
-  const classes = useStyles();
 
-  const [amount, setAmount] = useState("");
+function FormDialog(props) {
+  const { isOpen, title, description, inputs } = props;
+  const { onClose, onSubmit } = props;
+  const classes = useStyles();
 
   return (
     <Dialog open={isOpen} onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Contribute</DialogTitle>
+      <DialogTitle id="form-dialog-title">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          To contribute please enter the amount in wei
-          <br />
-          <strong>Note: </strong>
-          Contributions must be greater than {minimumContribution} wei
-        </DialogContentText>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          label="Amount"
-          type="text"
-          fullWidth
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
+        {description && <DialogContentText>{description}</DialogContentText>}
+        {inputs.length > 0 &&
+          inputs.map((input) => {
+            return (
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                type="text"
+                fullWidth
+                key={input.label}
+                label={input.label}
+                value={input.value}
+                onChange={input.onChange}
+              />
+            );
+          })}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} className={classes.button}>
           Cancel
         </Button>
-        <Button onClick={() => onContribute(amount)} className={classes.button}>
-          Contribute
+        <Button onClick={onSubmit} className={classes.button}>
+          {title}
         </Button>
       </DialogActions>
     </Dialog>

@@ -6,6 +6,7 @@ import { WCButton } from "../../stories/";
 import { useHistory, useParams } from "react-router-dom";
 import { FormDialog } from "../../components";
 import { fetchIsContributor } from "../../helpers/functions";
+import { useCampaignMutation } from "../../hooks/CampaignHook";
 
 const useStyles = makeStyles({
   root: {
@@ -20,12 +21,22 @@ function SummaryCard(props) {
   const { address } = useParams();
   const { account } = useContext(EthereumContext);
   const history = useHistory();
-  const { campaignSummary, onContribute } = props;
+  const { campaignSummary } = props;
   const classes = useStyles();
 
   const [isContributionDialogOpen, setIsContributionDialogOpen] =
     useState(false);
   const [isContributor, setIsContributor] = useState(false);
+  const [amount, setAmount] = useState("");
+
+  // Contribution hook
+  const { makeContribution } = useCampaignMutation();
+  const { mutate: contribute } = makeContribution;
+
+  const handleContribution = (amount) => {
+    setAmount("");
+    contribute({ address, amount });
+  };
 
   useEffect(() => {
     if (address && account)
@@ -37,6 +48,14 @@ function SummaryCard(props) {
           console.log("Something went wrong", err);
         });
   }, [address, account]);
+
+  const inputs = [
+    {
+      label: "In Wei",
+      value: amount,
+      onChange: (e) => setAmount(e.target.value),
+    },
+  ];
 
   return (
     <Card className={classes.root}>
@@ -94,8 +113,18 @@ function SummaryCard(props) {
       <FormDialog
         isOpen={isContributionDialogOpen}
         onClose={() => setIsContributionDialogOpen(false)}
-        minimumContribution={campaignSummary.minimumContribution}
-        onContribute={onContribute}
+        title="Contribute"
+        description={
+          <>
+            To contribute please enter the amount in wei
+            <br />
+            <strong>Note: </strong>
+            Contributions must be greater than
+            {campaignSummary.minimumContribution} wei
+          </>
+        }
+        inputs={inputs}
+        onSubmit={() => handleContribution(amount)}
       />
     </Card>
   );
