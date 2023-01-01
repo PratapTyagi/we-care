@@ -1,17 +1,16 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Box, CardMedia, Typography } from "@material-ui/core";
-import { ContributionCard } from "../components";
+import { Box, CardMedia, makeStyles, Typography } from "@material-ui/core";
 import {
   useCampaignMutation,
   useFetchCampaignSummary,
 } from "../hooks/CampaignHook";
+import { SummaryCard } from "../containers";
 
 const CampaignDetailsPage = () => {
   const { address } = useParams();
   const { data: campaignSummary, isLoading: campaignSummaryLoading } =
     useFetchCampaignSummary(address);
-
   const { makeContribution } = useCampaignMutation();
   const { mutate: contribute } = makeContribution;
 
@@ -55,7 +54,7 @@ const CampaignDetailsPage = () => {
         </Box>
 
         {/* Donation option */}
-        <ContributionCard
+        <SummaryCard
           campaignSummary={campaignSummary}
           onContribute={handleContribution}
         />

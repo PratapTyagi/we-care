@@ -143,5 +143,26 @@ export const contributeAmount = async (address, amount, callbackFn) => {
 // Fetch if account is contributor to current campaign
 export const fetchIsContributor = async (address, account) => {
   const contract = new ethers.Contract(address, CampaignJSON.abi, provider);
-  await contract.isContributor(account);
+  return await contract.isContributor(account);
+};
+
+// Startup owner creates request for spending funds
+export const createRequest = async ({
+  address,
+  description,
+  value,
+  recepient,
+  callbackFn,
+}) => {
+  const signer = await fetchSignerForUpdation();
+  if (!Object.entries(signer).length) return;
+  const contract = new ethers.Contract(address, CampaignJSON.abi, signer);
+
+  try {
+    const info = await contract.createRequest(description, value, recepient);
+    const temp = await info.wait();
+    if (temp) callbackFn();
+  } catch (error) {
+    alert(error.message || "Something went wrong");
+  }
 };

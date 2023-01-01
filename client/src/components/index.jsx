@@ -4,5 +4,4 @@ export { default as Home } from "./home/Home";
 export { default as ViewDetails } from "./viewDetails/ViewDetails";
 export { default as ViewRequests } from "./viewRequests/ViewRequests";
 export { default as Addrequest } from "./addrequest/Addrequest";
-export { default as ContributionCard } from "./ContributionCard/ContributionCard";
 export { default as FormDialog } from "./FormDialog/FormDialog";

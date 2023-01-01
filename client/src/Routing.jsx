@@ -5,7 +5,12 @@ import {
   ViewRequests,
   Addrequest,
 } from "./components";
-import { CampaignDetailsPage, CreateCampaignPage, Home } from "./pages";
+import {
+  CampaignDetailsPage,
+  CreateCampaignPage,
+  Home,
+  ViewRequestsPage,
+} from "./pages";
 
 const Routing = () => {
   return (
@@ -16,7 +21,7 @@ const Routing = () => {
       <Route
         path="/campaign/:address/requests"
         exact
-        component={ViewRequests}
+        component={ViewRequestsPage}
       />
       <Route
         path="/campaign/:address/requests/addrequest"

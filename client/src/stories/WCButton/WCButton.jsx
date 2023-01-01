@@ -1,18 +1,38 @@
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button, makeStyles, Tooltip } from "@material-ui/core";
 
-const WCButton = ({ label, children, ...props }) => {
+const useStyles = makeStyles({
+  contributeBtn: {
+    margin: "0 auto",
+    color: "white !important",
+    backgroundColor: "var(--theame-color) !important",
+  },
+  disabledBtn: {
+    margin: "0 auto",
+    color: "white !important",
+    backgroundColor: "grey",
+    cursor: "text !important",
+  },
+});
+const WCButton = ({ label, children, disabled, ...props }) => {
+  const classes = useStyles();
+
   return (
-    <Button {...props}>
-      {label}
-      {children}
-    </Button>
+    <Tooltip
+      title={disabled ? `Please connect your account in order to ${label}` : ""}
+    >
+      <Button
+        {...props}
+        className={disabled ? classes.disabledBtn : classes.contributeBtn}
+      >
+        {label}
+        {children}
+      </Button>
+    </Tooltip>
   );
 };
 
 WCButton.defaultProps = {
-  color: "primary",
-  component: undefined,
   disabled: false,
   endIcon: undefined,
   label: "Label",
