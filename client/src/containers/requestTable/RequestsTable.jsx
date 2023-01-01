@@ -66,7 +66,6 @@ const RequestsTable = (props) => {
                       >
                         Approve
                       </button>
-                      )
                     </td>
                   ) : null}
                   {!value.compleate && campaignSummary.manager === account ? (

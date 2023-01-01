@@ -69,9 +69,11 @@ const useCampaignMutation = () => {
   );
 
   const makeContribution = useMutation(
-    async ({ address, amount }) => {
-      const callbackFn = async () =>
+    async ({ address, amount, onClose }) => {
+      const callbackFn = async () => {
         await queryClient.invalidateQueries(`${CAMPAIGNS}:${address}`);
+        onClose();
+      };
       const data = await contributeAmount(address, amount, callbackFn);
       return data;
     },

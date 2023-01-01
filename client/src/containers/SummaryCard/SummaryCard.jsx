@@ -35,7 +35,11 @@ function SummaryCard(props) {
 
   const handleContribution = (amount) => {
     setAmount("");
-    contribute({ address, amount });
+    contribute({
+      address,
+      amount,
+      onClose: () => setIsContributionDialogOpen(false),
+    });
   };
 
   useEffect(() => {

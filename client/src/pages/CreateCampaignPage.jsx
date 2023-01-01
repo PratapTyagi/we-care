@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { EthereumContext, ToasterContext } from "../contexts";
 import { useCampaignMutation, useFetchCampaigns } from "../hooks/CampaignHook";
 import WCForm from "../stories/WCForm/WCForm";
@@ -8,6 +9,8 @@ import WCForm from "../stories/WCForm/WCForm";
 const CreateCampaignPage = () => {
   const { showToast } = useContext(ToasterContext);
   const { account } = useContext(EthereumContext);
+  const history = useHistory();
+
   const [file, setFile] = useState("");
   const [values, setValues] = useState({
     title: "",
@@ -20,8 +23,13 @@ const CreateCampaignPage = () => {
   const { mutate: createNewCampaign, isSuccess: createNewCampaignSuccess } =
     createCampaign;
 
+  const refreshInfo = async () => {
+    await refetchCampaigns();
+    history.push("/");
+  };
+
   useEffect(() => {
-    refetchCampaigns();
+    if (createNewCampaignSuccess) refreshInfo();
   }, [createNewCampaignSuccess, refetchCampaigns]);
 
   const handleFileUploadProgress = (e) => {

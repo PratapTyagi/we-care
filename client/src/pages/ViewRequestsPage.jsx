@@ -59,7 +59,13 @@ const ViewRequestsPage = () => {
   const handleAddRequest = ({ description, amount, recepient }) => {
     if (description === "" || amount === "" || recepient === "")
       return alert("Empty inputs");
-    createRequest({ address, description, amount, recepient });
+    createRequest({
+      address,
+      description,
+      amount,
+      recepient,
+      callbackFn: () => setIsAddRequestDialogOpen(false),
+    });
   };
 
   const inputs = [
