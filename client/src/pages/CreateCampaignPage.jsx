@@ -23,14 +23,13 @@ const CreateCampaignPage = () => {
   const { mutate: createNewCampaign, isSuccess: createNewCampaignSuccess } =
     createCampaign;
 
-  const refreshInfo = async () => {
-    await refetchCampaigns();
-    history.push("/");
-  };
-
   useEffect(() => {
+    const refreshInfo = async () => {
+      await refetchCampaigns();
+      history.push("/");
+    };
     if (createNewCampaignSuccess) refreshInfo();
-  }, [createNewCampaignSuccess, refetchCampaigns]);
+  }, [createNewCampaignSuccess, refetchCampaigns, history]);
 
   const handleFileUploadProgress = (e) => {
     console.log("File Uploading ...");

@@ -1,10 +1,5 @@
 import { Route } from "react-router-dom";
-import {
-  NewCampaign,
-  ViewDetails,
-  ViewRequests,
-  Addrequest,
-} from "./components";
+import { Addrequest } from "./components";
 import {
   CampaignDetailsPage,
   CreateCampaignPage,
