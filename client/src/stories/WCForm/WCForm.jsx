@@ -46,7 +46,6 @@ const WCForm = (props) => {
                     id={value}
                     type={type}
                     onChange={onChange}
-                    accept={rest.accept}
                     style={{ display: "none" }}
                   />
                   <label htmlFor={value}>

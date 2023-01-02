@@ -1,11 +1,12 @@
 import axios from "axios";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
 const API_KEY = process.env.REACT_APP_CLOUDINARY_API_KEY;
 
 const uploadMedia = async ({ file, onUploadProgress }) => {
   if (!file) return;
   // get signature. In reality you could store this in localstorage or some other cache mechanism, it's good for 1 hour
-  const signatureResponse = await axios.get("/get-signature");
+  const signatureResponse = await axios.get(BACKEND_URL + "/get-signature");
 
   const data = new FormData();
   data.append("file", file);

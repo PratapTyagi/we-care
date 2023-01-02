@@ -10,7 +10,7 @@ module.exports = {
     hardhat: {
       chainId: 31337,
     },
-    rinkeby: {
+    goerli: {
       url: INFURA_API,
       accounts: [PRIVATE_KEY],
     },
